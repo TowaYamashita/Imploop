@@ -47,7 +47,7 @@ class DBProvider {
         name TEXT NOT NULL
       )''',
       '''
-      INSERT INTO status (name) VALUES('todo', 'doing', 'done')
+      INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
       '''
       // '''
       // CREATE TABLE task_notice(
