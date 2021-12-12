@@ -1,10 +1,12 @@
 import 'package:sample/domain/todo.dart';
 import 'package:sample/repository/database_provider.dart';
 
+/// Todoの永続化処理を行う
 class TodoRepository {
   static String table = 'todo';
   static DBProvider instance = DBProvider.instance;
 
+  /// Todoを新規追加する
   static Future<Todo> create({
     required int taskId,
     required String name,
@@ -31,12 +33,28 @@ class TodoRepository {
     );
   }
 
+  /// 引数をtodo_idに持つtodoを取得する
   static Future<Todo?> get(int todoId) async {
     final db = await instance.database;
     final rows =
-        await db.rawQuery('SELECT * FROM $table WHERE id = ?', [todoId]);
+        await db.rawQuery('SELECT * FROM $table WHERE todo_id = ?', [todoId]);
     if (rows.isEmpty) return null;
 
     return Todo.fromMap(rows.first);
+  }
+
+  /// 引数をtask_idに持つtodoを取得する
+  static Future<List<Todo>?> getByTaskId(int taskId) async {
+    final db = await instance.database;
+    final rows =
+        await db.rawQuery('SELECT * FROM $table WHERE task_id = ?', [taskId]);
+    if (rows.isEmpty) return null;
+
+    final List<Todo> todosInTask = [];
+    for (var element in rows) {
+      final Todo todoInTask = Todo.fromMap(element);
+      todosInTask.add(todoInTask);
+    }
+    return todosInTask;
   }
 }
