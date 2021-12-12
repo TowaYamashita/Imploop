@@ -22,61 +22,7 @@ class DBProvider {
   }
 
   void _createTable(Batch batch) {
-    final List<String> _queryList = [
-      '''
-      CREATE TABLE task(
-        task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        status_id INTEGER NOT NULL DEFAULT 1,
-        foreign key (status_id) references status(status_id)
-      )''',
-      '''
-      CREATE TABLE todo(
-        todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task_id INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        status_id INTEGER NOT NULL DEFAULT 1,
-        estimate INTEGER NOT NULL,
-        elapsed INTEGER DEFAULT NULL,
-        foreign key (task_id) references task(task_id)
-        foreign key (status_id) references status(status_id)
-      )''',
-      '''
-      CREATE TABLE status(
-        status_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
-      )''',
-      '''
-      INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
-      '''
-      // '''
-      // CREATE TABLE task_notice(
-      //   task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      //   task_id INTEGER NOT NULL,
-      //   body TEXT NOT NULL
-      // )''',
-      // '''
-      // CREATE TABLE todo_notice(
-      //   todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      //   todo_id INTEGER NOT NULL,
-      //   body TEXT NOT NULL
-      // )''',
-      // '''
-      // CREATE TABLE tag(
-      //   tag_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      //   name TEXT NOT NULL
-      // )''',
-      // '''
-      // CREATE TABLE task_notice_tag(
-      //   task_notice_id INTEGER,
-      //   tag_id INTEGER
-      // )''',
-      // '''
-      // CREATE TABLE todo_notice_tag(
-      //   todo_notice_id INTEGER,
-      //   tag_id INTEGER
-      // )''',
-    ];
+    const List<String> _queryList = _initializeQuery;
 
     for (var _query in _queryList) {
       batch.execute(_query);
@@ -105,3 +51,59 @@ class DBProvider {
     );
   }
 }
+
+const List<String> _initializeQuery = [
+  '''
+      CREATE TABLE task(
+        task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        status_id INTEGER NOT NULL DEFAULT 1,
+        foreign key (status_id) references status(status_id)
+      )''',
+  '''
+      CREATE TABLE todo(
+        todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        task_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        status_id INTEGER NOT NULL DEFAULT 1,
+        estimate INTEGER NOT NULL,
+        elapsed INTEGER DEFAULT NULL,
+        foreign key (task_id) references task(task_id)
+        foreign key (status_id) references status(status_id)
+      )''',
+  '''
+      CREATE TABLE status(
+        status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL
+      )''',
+  '''
+      INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
+      '''
+  // '''
+  // CREATE TABLE task_notice(
+  //   task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //   task_id INTEGER NOT NULL,
+  //   body TEXT NOT NULL
+  // )''',
+  // '''
+  // CREATE TABLE todo_notice(
+  //   todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //   todo_id INTEGER NOT NULL,
+  //   body TEXT NOT NULL
+  // )''',
+  // '''
+  // CREATE TABLE tag(
+  //   tag_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //   name TEXT NOT NULL
+  // )''',
+  // '''
+  // CREATE TABLE task_notice_tag(
+  //   task_notice_id INTEGER,
+  //   tag_id INTEGER
+  // )''',
+  // '''
+  // CREATE TABLE todo_notice_tag(
+  //   todo_notice_id INTEGER,
+  //   tag_id INTEGER
+  // )''',
+];
