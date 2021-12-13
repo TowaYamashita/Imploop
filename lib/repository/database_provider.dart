@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
-  final _databaseName = "MyDatabase.db";
+  final _databaseName = "Imploop.db";
   final _databaseVersion = 1;
 
   // make this singleton class
