@@ -12,15 +12,7 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return const TaskListPage();
-                },
-              ),
-            )
-          },
+          onPressed: () => TaskListPage.show(context),
           child: const Text('Task・Todo入力画面へ遷移'),
         ),
       ),

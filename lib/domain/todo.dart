@@ -17,10 +17,10 @@ class Todo {
 
   factory Todo.fromMap(Map todo) {
     return Todo(
-      todoId: todo["todoId"] as int,
-      taskId: todo["taskId"] as int,
+      todoId: todo["todo_id"] as int,
+      taskId: todo["task_id"] as int,
       name: todo["name"] as String,
-      statusId: todo["statusId"] as int,
+      statusId: todo["status_id"] as int,
       estimate: todo["estimate"] as int,
       elapsed: todo["elapsed"] as int?,
     );

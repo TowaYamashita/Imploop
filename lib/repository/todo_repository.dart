@@ -14,7 +14,7 @@ class TodoRepository {
     int? elapsed,
   }) async {
     final Map<String, dynamic> row = {
-      "taskId": taskId,
+      "task_id": taskId,
       "name": name,
       "estimate": estimate,
       "elapsed": elapsed,
@@ -25,7 +25,7 @@ class TodoRepository {
 
     return Todo(
       todoId: id,
-      taskId: row["taskId"] as int,
+      taskId: row["task_id"] as int,
       name: row["name"] as String,
       statusId: 1,
       estimate: row["estimate"] as int,

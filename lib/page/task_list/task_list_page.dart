@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:imploop/domain/task.dart';
+import 'package:imploop/page/todo_list/todo_list_page.dart';
 import 'package:imploop/service/task_service.dart';
 
 class TaskListPage extends StatelessWidget {
   const TaskListPage({Key? key}) : super(key: key);
+
+  static show(BuildContext context) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const TaskListPage();
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +26,7 @@ class TaskListPage extends StatelessWidget {
       body: const _TaskList(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const _TaskCreatePage();
-              },
-              fullscreenDialog: true,
-            ),
-          );
-        },
+        onPressed: () => _TaskCreatePage.show(context),
       ),
     );
   }
@@ -54,6 +56,13 @@ class _TaskList extends StatelessWidget {
               subtitle: Text(
                 'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
               ),
+              trailing: IconButton(
+                onPressed: () => TodoListPage.show(
+                  context,
+                  _taskList[index].taskId,
+                ),
+                icon: const Icon(Icons.edit),
+              ),
             );
           },
           itemCount: _taskList!.length,
@@ -65,6 +74,18 @@ class _TaskList extends StatelessWidget {
 
 class _TaskCreatePage extends StatelessWidget {
   const _TaskCreatePage({Key? key}) : super(key: key);
+
+  static show(BuildContext context) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const _TaskCreatePage();
+        },
+        fullscreenDialog: true,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
