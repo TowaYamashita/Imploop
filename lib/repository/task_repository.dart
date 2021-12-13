@@ -1,5 +1,5 @@
-import 'package:sample/domain/task.dart';
-import 'package:sample/repository/database_provider.dart';
+import 'package:imploop/domain/task.dart';
+import 'package:imploop/repository/database_provider.dart';
 
 /// Taskの永続化処理を行う
 class TaskRepository {

@@ -1,5 +1,5 @@
-import 'package:sample/domain/task.dart';
-import 'package:sample/repository/task_repository.dart';
+import 'package:imploop/domain/task.dart';
+import 'package:imploop/repository/task_repository.dart';
 
 class TaskService {
   static Future<Task> registerNewTask(String name) async{

@@ -1,5 +1,5 @@
-import 'package:sample/domain/todo.dart';
-import 'package:sample/repository/database_provider.dart';
+import 'package:imploop/domain/todo.dart';
+import 'package:imploop/repository/database_provider.dart';
 
 /// Todoの永続化処理を行う
 class TodoRepository {

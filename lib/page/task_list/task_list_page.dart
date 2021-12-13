@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sample/domain/task.dart';
-import 'package:sample/service/task_service.dart';
+import 'package:imploop/domain/task.dart';
+import 'package:imploop/service/task_service.dart';
 
 class TaskListPage extends StatelessWidget {
   const TaskListPage({Key? key}) : super(key: key);
