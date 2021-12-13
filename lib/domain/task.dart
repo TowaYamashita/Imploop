@@ -11,7 +11,7 @@ class Task {
 
   factory Task.fromMap(Map task) {
     return Task(
-      taskId: task['taskId'] as int,
+      taskId: task['task_id'] as int,
       name: task['name'] as String,
       statusId: task['status_id'] as int,
     );
