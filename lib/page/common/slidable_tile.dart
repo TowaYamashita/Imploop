@@ -20,23 +20,21 @@ class SlidableTile extends StatelessWidget {
         motion: ScrollMotion(),
         children: [
           SlidableAction(
-            // flex: 2,
             onPressed: editAction,
-            backgroundColor: Color(0xFF439DC0),
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             icon: Icons.edit,
             label: '編集',
           ),
           SlidableAction(
             onPressed: deleteAction,
-            backgroundColor: Color(0xFFFF0000),
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.error,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             icon: Icons.delete,
             label: '削除',
           ),
         ],
       ),
-
       child: ListTile(title: Text(tileTitle)),
     );
   }
