@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imploop/config/thema.dart';
 import 'package:imploop/page/home/home_page.dart';
 
 void main() {
@@ -13,8 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
 
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      theme: appThema,
+      home: const HomePage(),
     );
   }
 }
