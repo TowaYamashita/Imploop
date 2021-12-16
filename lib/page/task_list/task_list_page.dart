@@ -105,7 +105,7 @@ class _TaskCreatePage extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Taskが追加されました。',
+                        "${addedTask.name}が追加されました。",
                       ),
                     ),
                   );
