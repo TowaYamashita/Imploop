@@ -4,12 +4,12 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class SlidableTile extends StatelessWidget {
   const SlidableTile({
     Key? key,
-    required this.tileTitle,
+    required this.tile,
     required this.editAction,
     required this.deleteAction,
   }) : super(key: key);
 
-  final String tileTitle;
+  final ListTile tile;
   final void Function(BuildContext context) editAction;
   final void Function(BuildContext context) deleteAction;
 
@@ -35,7 +35,7 @@ class SlidableTile extends StatelessWidget {
           ),
         ],
       ),
-      child: ListTile(title: Text(tileTitle)),
+      child: tile,
     );
   }
 }

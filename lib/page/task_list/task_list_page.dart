@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imploop/domain/task.dart';
+import 'package:imploop/page/common/slidable_tile.dart';
 import 'package:imploop/page/todo_list/todo_list_page.dart';
 import 'package:imploop/service/task_service.dart';
 
@@ -49,25 +50,52 @@ class _TaskList extends StatelessWidget {
         final List<Task>? _taskList = snapshot.data ?? [];
         return ListView.builder(
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                _taskList![index].name.toString(),
-              ),
-              subtitle: Text(
-                'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
-              ),
-              trailing: IconButton(
-                onPressed: () => TodoListPage.show(
-                  context,
-                  _taskList[index].taskId,
-                ),
-                icon: const Icon(Icons.edit),
-              ),
+            return _TaskTile(
+              title: _taskList![index].name.toString(),
+              subtitle:
+                  'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
+              taskId: _taskList[index].taskId,
             );
           },
           itemCount: _taskList!.length,
         );
       },
+    );
+  }
+}
+
+class _TaskTile extends StatelessWidget {
+  const _TaskTile({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.taskId,
+  }) : super(key: key);
+
+  final String title;
+  final String subtitle;
+  final int taskId;
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidableTile(
+      tile: ListTile(
+        title: Text(
+          title,
+        ),
+        subtitle: Text(
+          subtitle,
+        ),
+        trailing: IconButton(
+          onPressed: () => TodoListPage.show(
+            context,
+            taskId,
+          ),
+          icon: const Icon(Icons.arrow_forward_ios_rounded),
+        ),
+      ),
+      editAction: (context) {},
+      deleteAction: (context) {},
     );
   }
 }
