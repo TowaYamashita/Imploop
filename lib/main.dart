@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imploop/page/home/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,21 +11,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+
     return const MaterialApp(
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Hello'),
-      ),
+      home: HomePage(),
     );
   }
 }
