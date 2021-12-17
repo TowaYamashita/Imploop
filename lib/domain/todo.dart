@@ -25,4 +25,15 @@ class Todo {
       elapsed: todo["elapsed"] as int?,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "todoId": todoId,
+      "taskId": taskId,
+      "name": name,
+      "statusId": statusId,
+      "estimate": estimate,
+      "elapsed:": elapsed,
+    };
+  }
 }

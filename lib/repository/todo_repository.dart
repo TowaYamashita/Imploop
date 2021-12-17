@@ -57,4 +57,19 @@ class TodoRepository {
     }
     return todosInTask;
   }
+
+  /// Todoを更新する
+  ///
+  /// 更新に成功したらtrue、そうでなかればfalseが返ってくる
+  static Future<bool> update(Todo updatedTodo) async {
+    final db = await instance.database;
+    final int affectedRowCount = await db.update(
+      table,
+      updatedTodo.toMap(),
+      where: "todo_id=?",
+      whereArgs: [updatedTodo.todoId],
+    );
+
+    return affectedRowCount > 0 ? true : false;
+  }
 }
