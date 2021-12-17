@@ -27,4 +27,8 @@ class TaskService {
       estimate: estimate,
     );
   }
+
+  static Future<bool> editTask(int taskId, String name) async {
+    return await TaskRepository.update(taskId, name);
+  }
 }
