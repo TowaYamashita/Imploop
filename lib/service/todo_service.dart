@@ -5,4 +5,8 @@ class TodoService {
   static Future<bool> editTodo(Todo updatedTodo) async {
     return await TodoRepository.update(updatedTodo);
   }
+
+  static Future<bool> deleteTodo(Todo updatedTodo) async {
+    return await TodoRepository.delete(updatedTodo);
+  }
 }

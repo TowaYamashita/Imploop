@@ -95,7 +95,20 @@ class _TaskTile extends StatelessWidget {
         ),
       ),
       editAction: (context) => _TaskEditPage.show(context, task),
-      deleteAction: (context) {},
+      deleteAction: (context) async{
+        if (await TaskService.deleteTask(task)) {
+          // Taskが追加されたことをスナックバーで通知
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Todoが削除されました。',
+              ),
+            ),
+          );
+          // 前の画面に遷移
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }

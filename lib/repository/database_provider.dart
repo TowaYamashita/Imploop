@@ -8,28 +8,27 @@ class DBProvider {
   final _databaseName = "Imploop.db";
   final _databaseVersion = 1;
 
-  // make this singleton class
   DBProvider._();
   static final DBProvider instance = DBProvider._();
 
-  // only have a single app-wide reference to the database
   Database? _database;
   Future<Database> get database async {
     if (_database != null) return _database!;
-    // lazily instantate the db the first time it is accessed
     _database = await _initDatabase();
     return _database!;
   }
 
-  void _createTable(Batch batch) {
+  /// テーブル作成
+  Future<void> _createTableFunction(Database db) async {
     const List<String> _queryList = _initializeQuery;
 
+    var batch = db.batch();
     for (var _query in _queryList) {
       batch.execute(_query);
     }
+    await batch.commit();
   }
 
-  //this opens the database (and creates it if it doesn't exist)
   Future<Database> _initDatabase() async {
     final Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
@@ -38,10 +37,7 @@ class DBProvider {
       path,
       version: _databaseVersion,
       onCreate: (db, version) async {
-        // テーブル作成
-        var batch = db.batch();
-        _createTable(batch);
-        await batch.commit();
+        _createTableFunction(db);
       },
       onConfigure: (db) async {
         // 外部キー制約を有効化
@@ -68,7 +64,7 @@ const List<String> _initializeQuery = [
         status_id INTEGER NOT NULL DEFAULT 1,
         estimate INTEGER NOT NULL,
         elapsed INTEGER DEFAULT NULL,
-        foreign key (task_id) references task(task_id)
+        foreign key (task_id) references task(task_id) on delete cascade
         foreign key (status_id) references status(status_id)
       )''',
   '''

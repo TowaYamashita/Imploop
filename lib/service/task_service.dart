@@ -31,4 +31,8 @@ class TaskService {
   static Future<bool> editTask(int taskId, String name) async {
     return await TaskRepository.update(taskId, name);
   }
+
+  static Future<bool> deleteTask(Task deletedTask) async {
+    return await TaskRepository.delete(deletedTask);
+  }
 }
