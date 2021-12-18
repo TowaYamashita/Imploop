@@ -1,5 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'task.freezed.dart';
+
+enum TaskArgument {
+  task_id,
+  name,
+  status_id,
+}
 
 @freezed
 abstract class Task implements _$Task {
@@ -10,19 +18,19 @@ abstract class Task implements _$Task {
     required int statusId,
   }) = _Task;
 
-  factory Task.fromMap(Map task) {
+  factory Task.fromMap(Map<String, dynamic> task) {
     return Task(
-      taskId: task['task_id'] as int,
-      name: task['name'] as String,
-      statusId: task['status_id'] as int,
+      taskId: task[TaskArgument.task_id.name] as int,
+      name: task[TaskArgument.name.name] as String,
+      statusId: task[TaskArgument.status_id.name] as int,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "task_id": taskId,
-      "name": name,
-      "status_id": statusId,
+      TaskArgument.task_id.name: taskId,
+      TaskArgument.name.name: name,
+      TaskArgument.status_id.name: statusId,
     };
   }
 }

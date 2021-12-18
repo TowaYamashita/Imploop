@@ -1,5 +1,16 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'todo.freezed.dart';
+
+enum TodoArgument {
+  todo_id,
+  task_id,
+  name,
+  status_id,
+  estimate,
+  elapsed,
+}
 
 @freezed
 abstract class Todo implements _$Todo {
@@ -13,25 +24,25 @@ abstract class Todo implements _$Todo {
     int? elapsed,
   }) = _Todo;
 
-  factory Todo.fromMap(Map todo) {
+  factory Todo.fromMap(Map<String, dynamic> todo) {
     return Todo(
-      todoId: todo["todo_id"] as int,
-      taskId: todo["task_id"] as int,
-      name: todo["name"] as String,
-      statusId: todo["status_id"] as int,
-      estimate: todo["estimate"] as int,
-      elapsed: todo["elapsed"] as int?,
+      todoId: todo[TodoArgument.todo_id.name] as int,
+      taskId: todo[TodoArgument.task_id.name] as int,
+      name: todo[TodoArgument.name.name] as String,
+      statusId: todo[TodoArgument.status_id.name] as int,
+      estimate: todo[TodoArgument.estimate.name] as int,
+      elapsed: todo[TodoArgument.elapsed.name] as int?,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "todo_id": todoId,
-      "task_id": taskId,
-      "name": name,
-      "status_id": statusId,
-      "estimate": estimate,
-      "elapsed": elapsed,
+      TodoArgument.todo_id.name: todoId,
+      TodoArgument.task_id.name: taskId,
+      TodoArgument.name.name: name,
+      TodoArgument.status_id.name: statusId,
+      TodoArgument.estimate.name: estimate,
+      TodoArgument.elapsed.name: elapsed,
     };
   }
 }
