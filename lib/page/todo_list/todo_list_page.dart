@@ -106,7 +106,20 @@ class _TodoTile extends StatelessWidget {
         ),
       ),
       editAction: (context) => _TodoEditPage.show(context, todo),
-      deleteAction: (context) {},
+      deleteAction: (context) async{
+        if (await TodoService.deleteTodo(todo)) {
+          // Taskが追加されたことをスナックバーで通知
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Todoが削除されました。',
+              ),
+            ),
+          );
+          // 前の画面に遷移
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }
@@ -227,9 +240,9 @@ class _TodoEditPage extends StatelessWidget {
 
   final Todo todo;
   final GlobalKey<FormFieldState<String>> nameKey =
-        GlobalKey<FormFieldState<String>>();
-    final GlobalKey<FormFieldState<String>> estimateKey =
-        GlobalKey<FormFieldState<String>>();
+      GlobalKey<FormFieldState<String>>();
+  final GlobalKey<FormFieldState<String>> estimateKey =
+      GlobalKey<FormFieldState<String>>();
 
   @override
   Widget build(BuildContext context) {

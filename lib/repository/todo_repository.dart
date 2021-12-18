@@ -72,4 +72,15 @@ class TodoRepository {
 
     return affectedRowCount > 0 ? true : false;
   }
+
+  static Future<bool> delete(Todo deletedTodo) async {
+    final db = await instance.database;
+    final int affectedRowCount = await db.delete(
+      table,
+      where: "todo_id=?",
+      whereArgs: [deletedTodo.todoId],
+    );
+
+    return affectedRowCount > 0 ? true : false;
+  }
 }
