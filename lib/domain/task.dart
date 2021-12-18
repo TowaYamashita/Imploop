@@ -1,13 +1,14 @@
-class Task {
-  final int taskId;
-  final String name;
-  final int statusId;
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'task.freezed.dart';
 
-  Task({
-    required this.taskId,
-    required this.name,
-    required this.statusId,
-  });
+@freezed
+abstract class Task implements _$Task {
+  const Task._();
+  const factory Task({
+    required int taskId,
+    required String name,
+    required int statusId,
+  }) = _Task;
 
   factory Task.fromMap(Map task) {
     return Task(
@@ -15,5 +16,13 @@ class Task {
       name: task['name'] as String,
       statusId: task['status_id'] as int,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "task_id": taskId,
+      "name": name,
+      "status_id": statusId,
+    };
   }
 }
