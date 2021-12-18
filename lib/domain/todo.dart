@@ -1,19 +1,17 @@
-class Todo {
-  final int todoId;
-  final int taskId;
-  final String name;
-  final int statusId;
-  final int estimate;
-  final int? elapsed;
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'todo.freezed.dart';
 
-  Todo({
-    required this.todoId,
-    required this.taskId,
-    required this.name,
-    required this.statusId,
-    required this.estimate,
-    this.elapsed,
-  });
+@freezed
+abstract class Todo implements _$Todo {
+  const Todo._();
+  const factory Todo({
+    required int todoId,
+    required int taskId,
+    required String name,
+    required int statusId,
+    required int estimate,
+    int? elapsed,
+  }) = _Todo;
 
   factory Todo.fromMap(Map todo) {
     return Todo(
@@ -24,5 +22,16 @@ class Todo {
       estimate: todo["estimate"] as int,
       elapsed: todo["elapsed"] as int?,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "todo_id": todoId,
+      "task_id": taskId,
+      "name": name,
+      "status_id": statusId,
+      "estimate": estimate,
+      "elapsed": elapsed,
+    };
   }
 }
