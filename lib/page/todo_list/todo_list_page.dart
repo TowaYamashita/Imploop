@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:imploop/domain/todo.dart';
+import 'package:imploop/page/common/slidable_tile.dart';
 import 'package:imploop/service/task_service.dart';
+import 'package:imploop/service/todo_service.dart';
 
 class TodoListPage extends StatelessWidget {
   const TodoListPage({
@@ -59,20 +61,52 @@ class _TodoList extends StatelessWidget {
         final List<Todo>? _todoList = snapshot.data ?? [];
         return ListView.builder(
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                _todoList![index].name.toString(),
-              ),
-              subtitle: Flexible(
-                child: Text(
+            return _TodoTile(
+              title: _todoList![index].name.toString(),
+              subtitle:
                   'taskId: ${_todoList[index].taskId} statusId: ${_todoList[index].statusId} estimate: ${_todoList[index].estimate}',
-                ),
-              ),
+              todo: _todoList[index],
             );
           },
           itemCount: _todoList!.length,
         );
       },
+    );
+  }
+}
+
+class _TodoTile extends StatelessWidget {
+  const _TodoTile({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.todo,
+  }) : super(key: key);
+
+  final String title;
+  final String subtitle;
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return SlidableTile(
+      tile: ListTile(
+        title: Text(
+          title,
+        ),
+        subtitle: Text(
+          subtitle,
+        ),
+        trailing: IconButton(
+          onPressed: () => TodoListPage.show(
+            context,
+            todo.todoId,
+          ),
+          icon: const Icon(Icons.arrow_forward_ios_rounded),
+        ),
+      ),
+      editAction: (context) => _TodoEditPage.show(context, todo),
+      deleteAction: (context) {},
     );
   }
 }
@@ -167,6 +201,80 @@ class _TodoCreatePage extends StatelessWidget {
                   }
                 },
                 child: const Text('登録する'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TodoEditPage extends StatelessWidget {
+  _TodoEditPage({Key? key, required this.todo}) : super(key: key);
+
+  static show(BuildContext context, Todo todo) {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return _TodoEditPage(todo: todo);
+        },
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
+  final Todo todo;
+  final GlobalKey<FormFieldState<String>> nameKey =
+        GlobalKey<FormFieldState<String>>();
+    final GlobalKey<FormFieldState<String>> estimateKey =
+        GlobalKey<FormFieldState<String>>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                key: nameKey,
+                initialValue: todo.name,
+              ),
+              TextFormField(
+                key: estimateKey,
+                initialValue: todo.estimate.toString(),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  String? updatedName = nameKey.currentState != null
+                      ? nameKey.currentState!.value
+                      : null;
+                  int? updatedEstimate = estimateKey.currentState != null
+                      ? int.parse(estimateKey.currentState!.value ?? '0')
+                      : null;
+                  if (updatedName != null && updatedEstimate != null) {
+                    final updatedTodo = todo.copyWith(
+                      name: updatedName,
+                      estimate: updatedEstimate,
+                    );
+                    if (await TodoService.editTodo(updatedTodo)) {
+                      // Todoが追加されたことをスナックバーで通知
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            "Todoが変更されました。",
+                          ),
+                        ),
+                      );
+                      // 前の画面に遷移
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+                child: const Text('変更する'),
               ),
             ],
           ),
