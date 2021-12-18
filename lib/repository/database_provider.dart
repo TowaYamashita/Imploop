@@ -68,7 +68,7 @@ const List<String> _initializeQuery = [
         status_id INTEGER NOT NULL DEFAULT 1,
         estimate INTEGER NOT NULL,
         elapsed INTEGER DEFAULT NULL,
-        foreign key (task_id) references task(task_id)
+        foreign key (task_id) references task(task_id) on delete cascade
         foreign key (status_id) references status(status_id)
       )''',
   '''
