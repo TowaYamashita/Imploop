@@ -60,7 +60,7 @@ class TodoRepository {
 
   /// Todoを更新する
   ///
-  /// 更新に成功したらtrue、そうでなかればfalseが返ってくる
+  /// 更新に成功したらtrue、そうでなければfalseが返ってくる
   static Future<bool> update(Todo updatedTodo) async {
     final db = await instance.database;
     final int affectedRowCount = await db.update(
@@ -73,6 +73,9 @@ class TodoRepository {
     return affectedRowCount > 0 ? true : false;
   }
 
+  /// Todoを削除する
+  ///
+  /// 削除に成功したらtrue、そうでなければfalseが返ってくる
   static Future<bool> delete(Todo deletedTodo) async {
     final db = await instance.database;
     final int affectedRowCount = await db.delete(
