@@ -39,7 +39,7 @@ class TaskRepository {
     if (rows.isEmpty) return null;
 
     final List<Task> allTask = [];
-    for (var element in rows) {
+    for (Map<String, dynamic> element in rows) {
       final Task task = Task.fromMap(element);
       allTask.add(task);
     }
@@ -48,11 +48,25 @@ class TaskRepository {
 
   /// Taskの名前を更新する
   ///
-  /// 更新に成功したらtrue、そうでなかればfalseが返ってくる
+  /// 更新に成功したらtrue、そうでなければfalseが返ってくる
   static Future<bool> update(int taskId, String name) async {
     final db = await instance.database;
     final int affectedRowCount = await db.update(table, {"name": name},
         where: "task_id=?", whereArgs: [taskId]);
+
+    return affectedRowCount > 0 ? true : false;
+  }
+
+  /// Taskを削除する
+  ///
+  /// 削除に成功したらtrue、そうでなければfalseが返ってくる
+  static Future<bool> delete(Task deletedTask) async {
+    final db = await instance.database;
+    final int affectedRowCount = await db.delete(
+      table,
+      where: "task_id=?",
+      whereArgs: [deletedTask.taskId],
+    );
 
     return affectedRowCount > 0 ? true : false;
   }
