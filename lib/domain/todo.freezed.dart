@@ -173,14 +173,15 @@ class __$TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Todo implements _Todo {
-  _$_Todo(
+class _$_Todo extends _Todo {
+  const _$_Todo(
       {required this.todoId,
       required this.taskId,
       required this.name,
       required this.statusId,
       required this.estimate,
-      this.elapsed});
+      this.elapsed})
+      : super._();
 
   @override
   final int todoId;
@@ -229,14 +230,15 @@ class _$_Todo implements _Todo {
       __$TodoCopyWithImpl<_Todo>(this, _$identity);
 }
 
-abstract class _Todo implements Todo {
-  factory _Todo(
+abstract class _Todo extends Todo {
+  const factory _Todo(
       {required int todoId,
       required int taskId,
       required String name,
       required int statusId,
       required int estimate,
       int? elapsed}) = _$_Todo;
+  const _Todo._() : super._();
 
   @override
   int get todoId;

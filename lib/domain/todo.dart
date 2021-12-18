@@ -3,7 +3,8 @@ part 'todo.freezed.dart';
 
 @freezed
 abstract class Todo implements _$Todo {
-  factory Todo({
+  const Todo._();
+  const factory Todo({
     required int todoId,
     required int taskId,
     required String name,
@@ -25,12 +26,12 @@ abstract class Todo implements _$Todo {
 
   Map<String, dynamic> toMap() {
     return {
-      "todoId": todoId,
-      "taskId": taskId,
+      "todo_id": todoId,
+      "task_id": taskId,
       "name": name,
-      "statusId": statusId,
+      "status_id": statusId,
       "estimate": estimate,
-      "elapsed:": elapsed,
+      "elapsed": elapsed,
     };
   }
 }
