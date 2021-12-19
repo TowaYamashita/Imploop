@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+final StopWatchTimer stopWatchTimer = StopWatchTimer(
+  mode: StopWatchMode.countUp,
+  onChange: (value) {},
+  onChangeRawSecond: (value) {},
+  onChangeRawMinute: (value) {},
+);
+
 /// カウントアップするタイマー
 ///
 /// タイマーの操作は`CountUpTimerStartButton`や`CountUpTimerStartButton`を使用する
 class CountUpTimer extends StatefulWidget {
-  const CountUpTimer({Key? key}) : super(key: key);
+  const CountUpTimer({
+    Key? key,
+    required this.stopWatchTimer,
+  }) : super(key: key);
+
+  final StopWatchTimer stopWatchTimer;
 
   @override
   _State createState() => _State();
 }
 
 class _State extends State<CountUpTimer> {
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
-    mode: StopWatchMode.countUp,
-    onChange: (value) {},
-    onChangeRawSecond: (value) {},
-    onChangeRawMinute: (value) {},
-  );
+
+  // final StopWatchTimer _stopWatchTimer = StopWatchTimer(
+  //   mode: StopWatchMode.countUp,
+  //   onChange: (value) {},
+  //   onChangeRawSecond: (value) {},
+  //   onChangeRawMinute: (value) {},
+  // );
 
   @override
   void initState() {
     super.initState();
-    _stopWatchTimer.rawTime.listen((value) {});
-    _stopWatchTimer.minuteTime.listen((value) {});
-    _stopWatchTimer.secondTime.listen((value) {});
-    _stopWatchTimer.records.listen((value) {});
+    widget.stopWatchTimer.rawTime.listen((value) {});
+    widget.stopWatchTimer.minuteTime.listen((value) {});
+    widget.stopWatchTimer.secondTime.listen((value) {});
+    widget.stopWatchTimer.records.listen((value) {});
   }
 
   @override
   void dispose() async {
     super.dispose();
-    await _stopWatchTimer.dispose();
+    await widget.stopWatchTimer.dispose();
   }
 
   @override
@@ -44,8 +57,8 @@ class _State extends State<CountUpTimer> {
           Padding(
             padding: const EdgeInsets.only(bottom: 0),
             child: StreamBuilder<int>(
-              stream: _stopWatchTimer.rawTime,
-              initialData: _stopWatchTimer.rawTime.value,
+              stream: widget.stopWatchTimer.rawTime,
+              initialData: widget.stopWatchTimer.rawTime.value,
               builder: (context, snap) {
                 final value = snap.data!;
                 final displayTime =
@@ -68,15 +81,6 @@ class _State extends State<CountUpTimer> {
               },
             ),
           ),
-          CountUpTimerStartButton(
-            stopWatchTimer: _stopWatchTimer,
-          ),
-          CountUpTimerStopButton(
-            stopWatchTimer: _stopWatchTimer,
-          ),
-          CountUpTimerResetButton(
-            stopWatchTimer: _stopWatchTimer,
-          )
         ],
       ),
     );
