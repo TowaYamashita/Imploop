@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:imploop/domain/task.dart';
+import 'package:imploop/domain/todo.dart';
 import 'package:imploop/page/common/count_up_timer.dart';
+import 'package:imploop/service/task_service.dart';
+import 'package:imploop/service/todo_service.dart';
 
 class TimerPage extends StatelessWidget {
-  const TimerPage({Key? key}) : super(key: key);
+  const TimerPage({Key? key, this.selectedTodo}) : super(key: key);
 
-  static show(BuildContext context) {
+  final Todo? selectedTodo;
+
+  static show(BuildContext context, {Todo? selectedTodo}) {
     return Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return const TimerPage();
+          return TimerPage(
+            selectedTodo: selectedTodo,
+          );
         },
       ),
     );
@@ -40,8 +49,121 @@ class TimerPage extends StatelessWidget {
                 stopWatchTimer: stopWatchTimer,
               ),
             ],
-          )
+          ),
+          selectedTodo == null
+              ? ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const TaskSelectorDialog();
+                      },
+                    );
+                  },
+                  child: const Text('やるtodoを選択する'),
+                )
+              : ElevatedButton(
+                  onPressed: () async {
+                    await TodoService.finishTodo(
+                      selectedTodo!,
+                      stopWatchTimer.rawTime.value,
+                    );
+                  },
+                  child: Text(
+                    "${selectedTodo!.name}を完了させる",
+                  ),
+                )
         ],
+      ),
+    );
+  }
+}
+
+class TaskSelectorDialog extends HookWidget {
+  const TaskSelectorDialog({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _future = useMemoized(() => TaskService.getAllTask());
+    final _snapshot = useFuture(_future);
+    if (_snapshot.connectionState != ConnectionState.done) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final List<Task> allTaskList = _snapshot.data!;
+    return SimpleDialog(
+      title: const Text('Todoを選択'),
+      children: [
+        for (final task in allTaskList) SimpleDialogTaskListTile(task: task),
+      ],
+    );
+  }
+}
+
+class SimpleDialogTaskListTile extends HookWidget {
+  const SimpleDialogTaskListTile({
+    Key? key,
+    required this.task,
+  }) : super(key: key);
+
+  final Task task;
+
+  @override
+  Widget build(BuildContext context) {
+    final _future =
+        useMemoized(() => TaskService.getAllTodoInTask(task.taskId));
+    final _snapshot = useFuture(_future);
+    if (_snapshot.connectionState != ConnectionState.done) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final List<Todo> allTodoListInTask = _snapshot.data!;
+    final _visible = useState<bool>(false);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text(task.name),
+          onTap: () {
+            _visible.value = !_visible.value;
+          },
+        ),
+        Visibility(
+          visible: _visible.value,
+          child: Column(
+            children: [
+              for (final Todo todo in allTodoListInTask)
+                SimpleDialogTodoListTile(todo: todo)
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SimpleDialogTodoListTile extends StatelessWidget {
+  const SimpleDialogTodoListTile({Key? key, required this.todo})
+      : super(key: key);
+
+  final Todo todo;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TimerPage.show(context, selectedTodo: todo);
+      },
+      child: Container(
+        width: double.infinity,
+        child: Text(todo.name),
       ),
     );
   }
