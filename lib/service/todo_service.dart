@@ -1,6 +1,6 @@
+import 'package:imploop/domain/status.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/repository/todo_repository.dart';
-import 'package:imploop/util/time_util.dart';
 
 class TodoService {
   static Future<bool> editTodo(Todo updatedTodo) async {
@@ -14,8 +14,8 @@ class TodoService {
   static Future<bool> finishTodo(Todo finishedTodo, int elapsed) async {
     return await TodoRepository.update(
       finishedTodo.copyWith(
-        elapsed: toMinutes(elapsed),
-        statusId: 3,
+        elapsed: elapsed,
+        statusId: StatusProcess.doing.index,
       ),
     );
   }

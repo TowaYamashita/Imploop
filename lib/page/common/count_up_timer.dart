@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imploop/domain/todo_timer.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 final StopWatchTimer stopWatchTimer = StopWatchTimer(
@@ -24,7 +25,6 @@ class CountUpTimer extends StatefulWidget {
 }
 
 class _State extends State<CountUpTimer> {
-
   // final StopWatchTimer _stopWatchTimer = StopWatchTimer(
   //   mode: StopWatchMode.countUp,
   //   onChange: (value) {},
@@ -113,7 +113,7 @@ class CountUpTimerStartButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        stopWatchTimer.onExecute.add(StopWatchExecute.start);
+        TodoTimer(stopWatchTimer).start();
       },
       child: Text(
         buttonText,
@@ -151,7 +151,7 @@ class CountUpTimerStopButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        stopWatchTimer.onExecute.add(StopWatchExecute.stop);
+        TodoTimer(stopWatchTimer).stop();
       },
       child: Text(
         buttonText,
@@ -189,7 +189,7 @@ class CountUpTimerResetButton extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+        TodoTimer(stopWatchTimer).reset();
       },
       child: Text(
         buttonText,
