@@ -1,3 +1,4 @@
+import 'package:imploop/domain/status.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/repository/todo_repository.dart';
 
@@ -8,5 +9,14 @@ class TodoService {
 
   static Future<bool> deleteTodo(Todo updatedTodo) async {
     return await TodoRepository.delete(updatedTodo);
+  }
+
+  static Future<bool> finishTodo(Todo finishedTodo, int elapsed) async {
+    return await TodoRepository.update(
+      finishedTodo.copyWith(
+        elapsed: elapsed,
+        statusId: StatusProcess.doing.index,
+      ),
+    );
   }
 }
