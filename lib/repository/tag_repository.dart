@@ -1,10 +1,10 @@
 import 'package:imploop/domain/tag.dart';
 import 'package:imploop/repository/database_provider.dart';
 
-class TagRepository{
+class TagRepository {
   static String table = 'tag';
   static DBProvider instance = DBProvider.instance;
-  
+
   /// Tagを新規追加する
   static Future<Tag> create(String name) async {
     final Map<String, String> row = {
@@ -23,8 +23,7 @@ class TagRepository{
   /// Tagを取得する
   static Future<List<Tag>?> getAll() async {
     final db = await instance.database;
-    final rows =
-        await db.rawQuery('SELECT * FROM $table');
+    final rows = await db.rawQuery('SELECT * FROM $table');
     if (rows.isEmpty) return null;
 
     final List<Tag> allTag = [];
@@ -33,5 +32,15 @@ class TagRepository{
       allTag.add(tag);
     }
     return allTag;
+  }
+
+  /// Tagを取得する
+  static Future<Tag?> get(int tagId) async {
+    final db = await instance.database;
+    final rows =
+        await db.rawQuery('SELECT * FROM $table WHERE tag_id = ?', [tagId]);
+    if (rows.isEmpty) return null;
+
+    return Tag.fromMap(rows.first);
   }
 }

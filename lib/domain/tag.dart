@@ -10,10 +10,10 @@ class Tag {
     required this.name,
   });
 
-  factory Tag.fromMap(Map<String, dynamic> task) {
+  factory Tag.fromMap(Map<String, dynamic> tag) {
     return Tag(
-      tagId: task[TagArgument.tag_id.name] as int,
-      name: task[TagArgument.name.name] as String,
+      tagId: tag[TagArgument.tag_id.name] as int,
+      name: tag[TagArgument.name.name] as String,
     );
   }
 

@@ -19,4 +19,8 @@ class TodoService {
       ),
     );
   }
+
+  static Future<bool> existsTodo(Todo todo) async{
+    return await TodoRepository.get(todo.todoId) != null;
+  }
 }
