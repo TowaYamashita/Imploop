@@ -75,31 +75,31 @@ const List<String> _initializeQuery = [
   '''
       INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
       '''
-  // '''
-  // CREATE TABLE task_notice(
-  //   task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  //   task_id INTEGER NOT NULL,
-  //   body TEXT NOT NULL
-  // )''',
-  // '''
-  // CREATE TABLE todo_notice(
-  //   todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  //   todo_id INTEGER NOT NULL,
-  //   body TEXT NOT NULL
-  // )''',
-  // '''
-  // CREATE TABLE tag(
-  //   tag_id INTEGER PRIMARY KEY AUTOINCREMENT,
-  //   name TEXT NOT NULL
-  // )''',
-  // '''
-  // CREATE TABLE task_notice_tag(
-  //   task_notice_id INTEGER,
-  //   tag_id INTEGER
-  // )''',
-  // '''
-  // CREATE TABLE todo_notice_tag(
-  //   todo_notice_id INTEGER,
-  //   tag_id INTEGER
-  // )''',
+  '''
+  CREATE TABLE task_notice(
+    task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER NOT NULL,
+    body TEXT NOT NULL
+  )''',
+  '''
+  CREATE TABLE todo_notice(
+    todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    todo_id INTEGER NOT NULL,
+    body TEXT NOT NULL
+  )''',
+  '''
+  CREATE TABLE tag(
+    tag_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+  )''',
+  '''
+  CREATE TABLE task_notice_tag(
+    task_notice_id INTEGER,
+    tag_id INTEGER
+  )''',
+  '''
+  CREATE TABLE todo_notice_tag(
+    todo_notice_id INTEGER,
+    tag_id INTEGER
+  )''',
 ];
