@@ -50,31 +50,31 @@ class DBProvider {
 
 const List<String> _initializeQuery = [
   '''
-      CREATE TABLE task(
-        task_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        status_id INTEGER NOT NULL DEFAULT 1,
-        foreign key (status_id) references status(status_id)
-      )''',
+  CREATE TABLE task(
+    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    status_id INTEGER NOT NULL DEFAULT 1,
+    foreign key (status_id) references status(status_id)
+  )''',
   '''
-      CREATE TABLE todo(
-        todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        task_id INTEGER NOT NULL,
-        name TEXT NOT NULL,
-        status_id INTEGER NOT NULL DEFAULT 1,
-        estimate INTEGER NOT NULL,
-        elapsed INTEGER DEFAULT NULL,
-        foreign key (task_id) references task(task_id) on delete cascade
-        foreign key (status_id) references status(status_id)
-      )''',
+  CREATE TABLE todo(
+    todo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    status_id INTEGER NOT NULL DEFAULT 1,
+    estimate INTEGER NOT NULL,
+    elapsed INTEGER DEFAULT NULL,
+    foreign key (task_id) references task(task_id) on delete cascade
+    foreign key (status_id) references status(status_id)
+  )''',
   '''
-      CREATE TABLE status(
-        status_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
-      )''',
+  CREATE TABLE status(
+    status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+  )''',
   '''
-      INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
-      '''
+  INSERT INTO status (name) VALUES('todo'), ('doing'), ('done')
+  ''',
   '''
   CREATE TABLE task_notice(
     task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
