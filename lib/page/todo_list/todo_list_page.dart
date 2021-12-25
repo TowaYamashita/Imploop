@@ -5,45 +5,8 @@ import 'package:imploop/page/common/slidable_tile.dart';
 import 'package:imploop/service/task_service.dart';
 import 'package:imploop/service/todo_service.dart';
 
-class TodoListPage extends StatelessWidget {
-  const TodoListPage({
-    Key? key,
-    required this.taskId,
-  }) : super(key: key);
-
-  final int taskId;
-
-  static show(BuildContext context, int taskId) {
-    return Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return TodoListPage(taskId: taskId);
-        },
-        fullscreenDialog: true,
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Taskリスト'),
-      ),
-      body: _TodoList(
-        taskId: taskId,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () => _TodoCreatePage.show(context, taskId),
-      ),
-    );
-  }
-}
-
-class _TodoList extends StatelessWidget {
-  const _TodoList({Key? key, required this.taskId}) : super(key: key);
+class TodoList extends StatelessWidget {
+  const TodoList({Key? key, required this.taskId}) : super(key: key);
 
   final int taskId;
 
@@ -60,6 +23,7 @@ class _TodoList extends StatelessWidget {
 
         final List<Todo>? _todoList = snapshot.data ?? [];
         return ListView.builder(
+          shrinkWrap: true,
           itemBuilder: (context, index) {
             return _TodoTile(
               title: _todoList![index].name.toString(),
@@ -91,6 +55,10 @@ class _TodoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlidableTile(
       tile: ListTile(
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.local_fire_department),
+        ),
         title: Text(
           title,
         ),
@@ -98,15 +66,12 @@ class _TodoTile extends StatelessWidget {
           subtitle,
         ),
         trailing: IconButton(
-          onPressed: () => TodoListPage.show(
-            context,
-            todo.todoId,
-          ),
+          onPressed: () {},
           icon: const Icon(Icons.arrow_forward_ios_rounded),
         ),
       ),
       editAction: (context) => _TodoEditPage.show(context, todo),
-      deleteAction: (context) async{
+      deleteAction: (context) async {
         if (await TodoService.deleteTodo(todo)) {
           // Taskが追加されたことをスナックバーで通知
           ScaffoldMessenger.of(context).showSnackBar(
@@ -124,8 +89,8 @@ class _TodoTile extends StatelessWidget {
   }
 }
 
-class _TodoCreatePage extends StatelessWidget {
-  _TodoCreatePage({
+class TodoCreatePage extends StatelessWidget {
+  TodoCreatePage({
     Key? key,
     required this.taskId,
   }) : super(key: key);
@@ -135,7 +100,7 @@ class _TodoCreatePage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return _TodoCreatePage(taskId: taskId);
+          return TodoCreatePage(taskId: taskId);
         },
         fullscreenDialog: true,
       ),

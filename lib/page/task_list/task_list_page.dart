@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/page/common/slidable_tile.dart';
 import 'package:imploop/page/todo_list/todo_list_page.dart';
@@ -64,7 +65,7 @@ class _TaskList extends StatelessWidget {
   }
 }
 
-class _TaskTile extends StatelessWidget {
+class _TaskTile extends HookWidget {
   const _TaskTile({
     Key? key,
     required this.title,
@@ -78,37 +79,55 @@ class _TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SlidableTile(
-      tile: ListTile(
-        title: Text(
-          title,
-        ),
-        subtitle: Text(
-          subtitle,
-        ),
-        trailing: IconButton(
-          onPressed: () => TodoListPage.show(
-            context,
-            task.taskId,
-          ),
-          icon: const Icon(Icons.arrow_forward_ios_rounded),
-        ),
-      ),
-      editAction: (context) => _TaskEditPage.show(context, task),
-      deleteAction: (context) async{
-        if (await TaskService.deleteTask(task)) {
-          // Taskが追加されたことをスナックバーで通知
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Todoが削除されました。',
-              ),
+    final _isVisibleTodoList = useState<bool>(false);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SlidableTile(
+          tile: ListTile(
+            leading: IconButton(
+              onPressed: () {
+                _isVisibleTodoList.value = !_isVisibleTodoList.value;
+              },
+              icon: _isVisibleTodoList.value
+                  ? const Icon(Icons.arrow_drop_up_outlined)
+                  : const Icon(Icons.arrow_drop_down_outlined),
             ),
-          );
-          // 前の画面に遷移
-          Navigator.pop(context);
-        }
-      },
+            title: Text(
+              title,
+            ),
+            subtitle: Text(
+              subtitle,
+            ),
+            trailing: IconButton(
+              onPressed: () => {
+                TodoCreatePage.show(context, task.taskId),
+              },
+              icon: const Icon(Icons.add_outlined),
+            ),
+          ),
+          editAction: (context) => _TaskEditPage.show(context, task),
+          deleteAction: (context) async {
+            if (await TaskService.deleteTask(task)) {
+              // Taskが追加されたことをスナックバーで通知
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Todoが削除されました。',
+                  ),
+                ),
+              );
+              // 前の画面に遷移
+              Navigator.pop(context);
+            }
+          },
+        ),
+        Visibility(
+          visible: _isVisibleTodoList.value,
+          child: TodoList(taskId: task.taskId),
+        ),
+      ],
     );
   }
 }
