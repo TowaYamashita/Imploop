@@ -6,10 +6,9 @@ class TodoNoticeRepository {
   static DBProvider instance = DBProvider.instance;
 
   /// TodoNoticeを新規追加する
-  static Future<TodoNotice?> create(int todoId, int tagId, String body) async {
+  static Future<TodoNotice?> create(int todoId, String body) async {
     final Map<String, dynamic> row = {
       "todo_id": todoId,
-      "tag_id": tagId,
       "body": body,
     };
 

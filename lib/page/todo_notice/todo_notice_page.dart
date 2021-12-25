@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:imploop/domain/tag.dart';
+import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/page/timer/timer_page.dart';
-import 'package:imploop/service/tag_service.dart';
+import 'package:imploop/service/todo_type_service.dart';
 import 'package:imploop/service/todo_notice_service.dart';
 
 class TodoNoticePage extends HookWidget {
@@ -34,7 +34,7 @@ class TodoNoticePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<Tag?> tagProvider = useState<Tag?>(null);
+    final ValueNotifier<TodoType?> tagProvider = useState<TodoType?>(null);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -93,7 +93,7 @@ class _TagArea extends StatelessWidget {
   }) : super(key: key);
 
   final tagFormKey = GlobalKey<FormFieldState<String>>();
-  final ValueNotifier<Tag?> provider;
+  final ValueNotifier<TodoType?> provider;
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +107,8 @@ class _TagArea extends StatelessWidget {
           onEditingComplete: () async {
             if (tagFormKey.currentState != null &&
                 tagFormKey.currentState!.value != null) {
-              final Tag? newTag =
-                  await TagService.add(tagFormKey.currentState!.value!);
+              final TodoType? newTag =
+                  await TodoTypeService.add(tagFormKey.currentState!.value!);
               if (newTag != null) {
                 provider.value = newTag;
               }
@@ -133,7 +133,7 @@ class _SubmitButton extends StatelessWidget {
 
   final Todo todo;
   final GlobalKey<FormFieldState<String>> noticeFormKey;
-  final ValueNotifier<Tag?> provider;
+  final ValueNotifier<TodoType?> provider;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class _SubmitButton extends StatelessWidget {
         final String notice = noticeFormKey.currentState != null
             ? noticeFormKey.currentState!.value ?? ''
             : '';
-        final Tag tag = provider.value!;
+        final TodoType tag = provider.value!;
         if (await TodoNoticeService.register(todo, tag, notice)) {
           TimerPage.show(context);
         }

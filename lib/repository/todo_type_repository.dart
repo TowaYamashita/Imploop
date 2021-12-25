@@ -1,12 +1,11 @@
-import 'package:imploop/domain/tag.dart';
+import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/repository/database_provider.dart';
 
-class TagRepository {
-  static String table = 'tag';
+class TodoTypeRepository {
+  static String table = 'todo_type';
   static DBProvider instance = DBProvider.instance;
 
-  /// Tagを新規追加する
-  static Future<Tag> create(String name) async {
+  static Future<TodoType> create(String name) async {
     final Map<String, String> row = {
       "name": name,
     };
@@ -14,33 +13,32 @@ class TagRepository {
     final db = await instance.database;
     final id = await db.insert(table, row);
 
-    return Tag(
-      tagId: id,
+    return TodoType(
+      todoTypeId: id,
       name: name,
     );
   }
 
-  /// Tagを取得する
-  static Future<List<Tag>?> getAll() async {
+  static Future<List<TodoType>?> getAll() async {
     final db = await instance.database;
     final rows = await db.rawQuery('SELECT * FROM $table');
     if (rows.isEmpty) return null;
 
-    final List<Tag> allTag = [];
+    final List<TodoType> allType = [];
     for (Map<String, dynamic> element in rows) {
-      final Tag tag = Tag.fromMap(element);
-      allTag.add(tag);
+      final TodoType todoType = TodoType.fromMap(element);
+      allType.add(todoType);
     }
-    return allTag;
+    return allType;
   }
 
   /// Tagを取得する
-  static Future<Tag?> get(int tagId) async {
+  static Future<TodoType?> get(int todoTypeId) async {
     final db = await instance.database;
     final rows =
-        await db.rawQuery('SELECT * FROM $table WHERE tag_id = ?', [tagId]);
+        await db.rawQuery('SELECT * FROM $table WHERE todo_type_id = ?', [todoTypeId]);
     if (rows.isEmpty) return null;
 
-    return Tag.fromMap(rows.first);
+    return TodoType.fromMap(rows.first);
   }
 }
