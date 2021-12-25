@@ -54,7 +54,9 @@ const List<String> _initializeQuery = [
     task_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     status_id INTEGER NOT NULL DEFAULT 1,
+    task_type_id INTEGER NOT NULL,
     foreign key (status_id) references status(status_id)
+    foreign key (task_type_id) references task_type(task_type_id)
   )''',
   '''
   CREATE TABLE todo(
@@ -62,10 +64,12 @@ const List<String> _initializeQuery = [
     task_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     status_id INTEGER NOT NULL DEFAULT 1,
+    todo_type_id INTEGER,
     estimate INTEGER NOT NULL,
     elapsed INTEGER DEFAULT NULL,
     foreign key (task_id) references task(task_id) on delete cascade
     foreign key (status_id) references status(status_id)
+    foreign key (todo_type_id) references todo_type(todo_type_id)
   )''',
   '''
   CREATE TABLE status(
@@ -79,21 +83,22 @@ const List<String> _initializeQuery = [
   CREATE TABLE task_notice(
     task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
     task_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL,
     body TEXT NOT NULL,
-    foreign key (tag_id) references tag(tag_id)
   )''',
   '''
   CREATE TABLE todo_notice(
     todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
     todo_id INTEGER NOT NULL,
-    tag_id INTEGER NOT NULL,
     body TEXT NOT NULL,
-    foreign key (tag_id) references tag(tag_id)
   )''',
   '''
-  CREATE TABLE tag(
-    tag_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  CREATE TABLE task_type(
+    task_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+  )''',
+  '''
+  CREATE TABLE todo_type(
+    todo_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
   )''',
 ];
