@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:imploop/domain/todo.dart';
+import 'package:imploop/page/task_list/todo/recommendation_todo_type_input_form.dart';
 import 'package:imploop/service/todo_service.dart';
 
-class TodoEditModal extends StatelessWidget {
+class TodoEditModal extends ConsumerWidget {
   TodoEditModal({Key? key, required this.todo}) : super(key: key);
 
   static show(BuildContext context, Todo todo) {
@@ -24,7 +26,7 @@ class TodoEditModal extends StatelessWidget {
       GlobalKey<FormFieldState<String>>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -39,6 +41,9 @@ class TodoEditModal extends StatelessWidget {
                 key: estimateKey,
                 initialValue: todo.estimate.toString(),
               ),
+              RecommendationTodoTypeInputForm(
+                todo: todo,
+              ),
               ElevatedButton(
                 onPressed: () async {
                   String? updatedName = nameKey.currentState != null
@@ -47,10 +52,15 @@ class TodoEditModal extends StatelessWidget {
                   int? updatedEstimate = estimateKey.currentState != null
                       ? int.parse(estimateKey.currentState!.value ?? '0')
                       : null;
-                  if (updatedName != null && updatedEstimate != null) {
+                  final selectedTodoType =
+                      ref.read(selectedTodoTypeProvider.notifier).state;
+                  if (updatedName != null &&
+                      updatedEstimate != null &&
+                      selectedTodoType != null) {
                     final updatedTodo = todo.copyWith(
                       name: updatedName,
                       estimate: updatedEstimate,
+                      todoTypeId: selectedTodoType.todoTypeId,
                     );
                     if (await TodoService.editTodo(updatedTodo)) {
                       // Todoが追加されたことをスナックバーで通知

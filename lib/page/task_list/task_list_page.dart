@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/page/task_list/task/task_create_modal.dart';
 import 'package:imploop/page/task_list/task/task_tile.dart';
 import 'package:imploop/service/task_service.dart';
 
-class TaskListPage extends StatelessWidget {
+class TaskListPage extends HookConsumerWidget {
   const TaskListPage({Key? key}) : super(key: key);
 
   static show(BuildContext context) {
@@ -19,12 +21,19 @@ class TaskListPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ValueNotifier<List<Task>?> allTaskList = useState<List<Task>?>(null);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Taskリスト'),
       ),
-      body: const _TaskList(),
+      body: RefreshIndicator(
+        onRefresh: () async{
+          allTaskList.value = await TaskService.getAllTask();
+        },
+        child: const _TaskList(),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => TaskCreateModal.show(context),

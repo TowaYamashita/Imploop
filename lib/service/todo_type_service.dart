@@ -6,7 +6,8 @@ class TodoTypeService {
   ///
   /// すでに登録されていればtrue、そうでなければfalseを返す
   static Future<bool> hasAlreadyRegistered(String name) async {
-    final List<TodoType> registeredTodoTypeList = await TodoTypeRepository.getAll() ?? [];
+    final List<TodoType> registeredTodoTypeList =
+        await TodoTypeRepository.getAll() ?? [];
     return registeredTodoTypeList
         .where((registeredTodoType) => registeredTodoType.name == name)
         .isNotEmpty;
@@ -21,7 +22,7 @@ class TodoTypeService {
     if (await hasAlreadyRegistered(name) == false) {
       return await TodoTypeRepository.create(name);
     }
-    return null;
+    return getByTypeName(name);
   }
 
   /// 登録済みのTagのリストを取得する
@@ -31,7 +32,22 @@ class TodoTypeService {
     return await TodoTypeRepository.getAll() ?? [];
   }
 
-  static Future<bool> existsTodoType(TodoType todoType) async {
-    return await TodoTypeRepository.get(todoType.todoTypeId) != null;
+  static Future<bool> existsTodoType(int todoTypeId) async {
+    return await TodoTypeRepository.get(todoTypeId) != null;
+  }
+
+  static Future<TodoType?> get(int todoTypeId) async {
+    return await TodoTypeRepository.get(todoTypeId);
+  }
+
+  static Future<TodoType?> getByTypeName(String todoTypeName) async {
+    final List<TodoType> registeredTodoTypeList =
+        await TodoTypeRepository.getAll() ?? [];
+    try {
+      return registeredTodoTypeList.firstWhere(
+          (registeredTodoType) => registeredTodoType.name == todoTypeName);
+    } catch (e) {
+      return null;
+    }
   }
 }

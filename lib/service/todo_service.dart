@@ -1,10 +1,14 @@
 import 'package:imploop/domain/status.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/repository/todo_repository.dart';
+import 'package:imploop/service/todo_type_service.dart';
 
 class TodoService {
   static Future<bool> editTodo(Todo updatedTodo) async {
-    return await TodoRepository.update(updatedTodo);
+    if (await TodoTypeService.existsTodoType(updatedTodo.todoTypeId)) {
+      return await TodoRepository.update(updatedTodo);
+    }
+    return false;
   }
 
   static Future<bool> deleteTodo(Todo updatedTodo) async {
@@ -20,7 +24,7 @@ class TodoService {
     );
   }
 
-  static Future<bool> existsTodo(Todo todo) async{
+  static Future<bool> existsTodo(Todo todo) async {
     return await TodoRepository.get(todo.todoId) != null;
   }
 }

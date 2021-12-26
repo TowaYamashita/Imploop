@@ -84,9 +84,7 @@ class TodoCreateModal extends ConsumerWidget {
                         ? int.parse(estimateKey.currentState!.value!)
                         : null;
                     late final Todo? addedTodo;
-                    if (_name != null &&
-                        _estimate != null
-                        ) {
+                    if (_name != null && _estimate != null) {
                       addedTodo = await TaskService.registerNewTodo(
                         task,
                         _name,

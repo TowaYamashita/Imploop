@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:imploop/domain/todo.dart';
 import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/service/todo_type_service.dart';
 
@@ -11,11 +12,28 @@ final StateProvider<TodoType?> selectedTodoTypeProvider =
 class RecommendationTodoTypeInputForm extends HookConsumerWidget {
   const RecommendationTodoTypeInputForm({
     Key? key,
+    this.todo,
   }) : super(key: key);
+
+  final Todo? todo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final input = useState<String?>(null);
+    TodoType? tmp;
+    if (todo != null) {
+      final _snapshot = useFuture(TodoTypeService.get(todo!.todoTypeId));
+      if (_snapshot.hasData == true) {
+        tmp = _snapshot.data;
+      } else {
+        return const Center(child: CircularProgressIndicator.adaptive());
+      }
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        ref.read(selectedTodoTypeProvider.notifier).update((state) => tmp);
+      });
+    }
+
+    final ValueNotifier<String?> input = useState<String?>(null);
+
     final showRecommedationList = useState<bool>(false);
     final selectedTodoType = ref.watch(selectedTodoTypeProvider);
     final TextEditingController controller = TextEditingController();
