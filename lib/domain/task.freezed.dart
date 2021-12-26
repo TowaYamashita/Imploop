@@ -18,11 +18,15 @@ class _$TaskTearOff {
   const _$TaskTearOff();
 
   _Task call(
-      {required int taskId, required String name, required int statusId}) {
+      {required int taskId,
+      required String name,
+      required int statusId,
+      required int taskTypeId}) {
     return _Task(
       taskId: taskId,
       name: name,
       statusId: statusId,
+      taskTypeId: taskTypeId,
     );
   }
 }
@@ -35,6 +39,7 @@ mixin _$Task {
   int get taskId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get statusId => throw _privateConstructorUsedError;
+  int get taskTypeId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TaskCopyWith<Task> get copyWith => throw _privateConstructorUsedError;
@@ -44,7 +49,7 @@ mixin _$Task {
 abstract class $TaskCopyWith<$Res> {
   factory $TaskCopyWith(Task value, $Res Function(Task) then) =
       _$TaskCopyWithImpl<$Res>;
-  $Res call({int taskId, String name, int statusId});
+  $Res call({int taskId, String name, int statusId, int taskTypeId});
 }
 
 /// @nodoc
@@ -60,6 +65,7 @@ class _$TaskCopyWithImpl<$Res> implements $TaskCopyWith<$Res> {
     Object? taskId = freezed,
     Object? name = freezed,
     Object? statusId = freezed,
+    Object? taskTypeId = freezed,
   }) {
     return _then(_value.copyWith(
       taskId: taskId == freezed
@@ -74,6 +80,10 @@ class _$TaskCopyWithImpl<$Res> implements $TaskCopyWith<$Res> {
           ? _value.statusId
           : statusId // ignore: cast_nullable_to_non_nullable
               as int,
+      taskTypeId: taskTypeId == freezed
+          ? _value.taskTypeId
+          : taskTypeId // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -83,7 +93,7 @@ abstract class _$TaskCopyWith<$Res> implements $TaskCopyWith<$Res> {
   factory _$TaskCopyWith(_Task value, $Res Function(_Task) then) =
       __$TaskCopyWithImpl<$Res>;
   @override
-  $Res call({int taskId, String name, int statusId});
+  $Res call({int taskId, String name, int statusId, int taskTypeId});
 }
 
 /// @nodoc
@@ -100,6 +110,7 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
     Object? taskId = freezed,
     Object? name = freezed,
     Object? statusId = freezed,
+    Object? taskTypeId = freezed,
   }) {
     return _then(_Task(
       taskId: taskId == freezed
@@ -114,6 +125,10 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
           ? _value.statusId
           : statusId // ignore: cast_nullable_to_non_nullable
               as int,
+      taskTypeId: taskTypeId == freezed
+          ? _value.taskTypeId
+          : taskTypeId // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -122,7 +137,10 @@ class __$TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res>
 
 class _$_Task extends _Task {
   const _$_Task(
-      {required this.taskId, required this.name, required this.statusId})
+      {required this.taskId,
+      required this.name,
+      required this.statusId,
+      required this.taskTypeId})
       : super._();
 
   @override
@@ -131,10 +149,12 @@ class _$_Task extends _Task {
   final String name;
   @override
   final int statusId;
+  @override
+  final int taskTypeId;
 
   @override
   String toString() {
-    return 'Task(taskId: $taskId, name: $name, statusId: $statusId)';
+    return 'Task(taskId: $taskId, name: $name, statusId: $statusId, taskTypeId: $taskTypeId)';
   }
 
   @override
@@ -144,7 +164,9 @@ class _$_Task extends _Task {
             other is _Task &&
             const DeepCollectionEquality().equals(other.taskId, taskId) &&
             const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.statusId, statusId));
+            const DeepCollectionEquality().equals(other.statusId, statusId) &&
+            const DeepCollectionEquality()
+                .equals(other.taskTypeId, taskTypeId));
   }
 
   @override
@@ -152,7 +174,8 @@ class _$_Task extends _Task {
       runtimeType,
       const DeepCollectionEquality().hash(taskId),
       const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(statusId));
+      const DeepCollectionEquality().hash(statusId),
+      const DeepCollectionEquality().hash(taskTypeId));
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +187,8 @@ abstract class _Task extends Task {
   const factory _Task(
       {required int taskId,
       required String name,
-      required int statusId}) = _$_Task;
+      required int statusId,
+      required int taskTypeId}) = _$_Task;
   const _Task._() : super._();
 
   @override
@@ -173,6 +197,8 @@ abstract class _Task extends Task {
   String get name;
   @override
   int get statusId;
+  @override
+  int get taskTypeId;
   @override
   @JsonKey(ignore: true)
   _$TaskCopyWith<_Task> get copyWith => throw _privateConstructorUsedError;

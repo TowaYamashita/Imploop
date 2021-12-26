@@ -7,9 +7,10 @@ class TaskRepository {
   static DBProvider instance = DBProvider.instance;
 
   /// Taskを新規追加する
-  static Future<Task> create(String name) async {
-    final Map<String, String> row = {
+  static Future<Task> create(String name, int taskTypeId) async {
+    final Map<String, dynamic> row = {
       "name": name,
+      "task_type_id": taskTypeId,
     };
 
     final db = await instance.database;
@@ -19,6 +20,7 @@ class TaskRepository {
       taskId: id,
       name: name,
       statusId: 1,
+      taskTypeId: taskTypeId,
     );
   }
 

@@ -1,11 +1,28 @@
 import 'package:imploop/domain/task.dart';
+import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/repository/task_repository.dart';
 import 'package:imploop/repository/todo_repository.dart';
+import 'package:imploop/service/task_type_service.dart';
 
 class TaskService {
-  static Future<Task> registerNewTask(String name) async {
-    return await TaskRepository.create(name);
+  static Future<Task?> registerNewTask(String name, TaskType? taskType) async {
+    if (taskType == null) {
+      return null;
+    }
+
+    late final TaskType registeredTaskType;
+    if (taskType.taskTypeId == -1) {
+      final tmp = await TaskTypeService.add(taskType.name);
+      if (tmp == null) {
+        return null;
+      }
+      registeredTaskType = tmp;
+    } else {
+      registeredTaskType = taskType;
+    }
+    
+    return await TaskRepository.create(name, registeredTaskType.taskTypeId);
   }
 
   static Future<List<Task>> getAllTask() async {

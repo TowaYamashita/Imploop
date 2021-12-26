@@ -9,17 +9,20 @@ final StateProvider<TodoType?> selectedTodoTypeProvider =
 
 /// 既存のテーブルにある値をフォームに入力した文字列に応じて表示するフォーム
 class RecommendationInputForm extends HookConsumerWidget {
-  const RecommendationInputForm({Key? key}) : super(key: key);
+  const RecommendationInputForm({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final input = useState<String?>(null);
     final showRecommedationList = useState<bool>(false);
-    final TodoType? selectedTodoType = ref.watch(selectedTodoTypeProvider);
+    final selectedTodoType = ref.watch(selectedTodoTypeProvider);
     final TextEditingController controller = TextEditingController();
 
     controller.text = input.value ?? selectedTodoType?.name ?? '';
-    controller.selection = TextSelection.fromPosition(TextPosition(offset: controller.text.length));
+    controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length));
 
     return Column(
       children: [
