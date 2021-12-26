@@ -8,6 +8,7 @@ enum TodoArgument {
   task_id,
   name,
   status_id,
+  todo_type_id,
   estimate,
   elapsed,
 }
@@ -20,6 +21,7 @@ abstract class Todo implements _$Todo {
     required int taskId,
     required String name,
     required int statusId,
+    required int todoTypeId,
     required int estimate,
     int? elapsed,
   }) = _Todo;
@@ -30,6 +32,7 @@ abstract class Todo implements _$Todo {
       taskId: todo[TodoArgument.task_id.name] as int,
       name: todo[TodoArgument.name.name] as String,
       statusId: todo[TodoArgument.status_id.name] as int,
+      todoTypeId: todo[TodoArgument.todo_type_id.name] as int,
       estimate: todo[TodoArgument.estimate.name] as int,
       elapsed: todo[TodoArgument.elapsed.name] as int?,
     );
@@ -41,6 +44,7 @@ abstract class Todo implements _$Todo {
       TodoArgument.task_id.name: taskId,
       TodoArgument.name.name: name,
       TodoArgument.status_id.name: statusId,
+      TodoArgument.todo_type_id.name: todoTypeId,
       TodoArgument.estimate.name: estimate,
       TodoArgument.elapsed.name: elapsed,
     };

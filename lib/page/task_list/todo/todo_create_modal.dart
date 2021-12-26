@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:imploop/domain/task.dart';
+import 'package:imploop/domain/todo.dart';
+import 'package:imploop/page/task_list/todo/recommendation_todo_type_input_form.dart';
 import 'package:imploop/service/task_service.dart';
 
-class TodoCreateModal extends StatelessWidget {
+class TodoCreateModal extends ConsumerWidget {
   TodoCreateModal({
     Key? key,
-    required this.taskId,
+    required this.task,
   }) : super(key: key);
 
-  static show(BuildContext context, int taskId) {
+  static show(BuildContext context, Task task) {
     return Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return TodoCreateModal(taskId: taskId);
+          return TodoCreateModal(task: task);
         },
         fullscreenDialog: true,
       ),
     );
   }
 
-  final int taskId;
+  final Task task;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>> nameKey =
       GlobalKey<FormFieldState<String>>();
@@ -28,7 +32,7 @@ class TodoCreateModal extends StatelessWidget {
       GlobalKey<FormFieldState<String>>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todo入力'),
@@ -68,27 +72,43 @@ class TodoCreateModal extends StatelessWidget {
                   return null;
                 },
               ),
+              const RecommendationTodoTypeInputForm(),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState != null &&
                       formKey.currentState!.validate()) {
+                    final selectedTodoType =
+                        ref.read(selectedTodoTypeProvider.notifier).state;
                     final String? _name = nameKey.currentState?.value;
                     final int? _estimate = estimateKey.currentState != null
                         ? int.parse(estimateKey.currentState!.value!)
                         : null;
-                    TaskService.registerNewTodo(
-                        taskId, _name ?? '', _estimate ?? -1);
+                    late final Todo? addedTodo;
+                    if (_name != null &&
+                        _estimate != null
+                        ) {
+                      addedTodo = await TaskService.registerNewTodo(
+                        task,
+                        _name,
+                        _estimate,
+                        selectedTodoType,
+                      );
+                    } else {
+                      addedTodo = null;
+                    }
 
-                    // Taskが追加されたことをスナックバーで通知
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Todoが追加されました。',
+                    // Todoが追加されたことをスナックバーで通知
+                    if (addedTodo != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Todoが追加されました。',
+                          ),
                         ),
-                      ),
-                    );
-                    // 前の画面に遷移
-                    Navigator.pop(context);
+                      );
+                      // 前の画面に遷移
+                      Navigator.pop(context);
+                    }
                   }
                 },
                 child: const Text('登録する'),

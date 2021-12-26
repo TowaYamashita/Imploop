@@ -1,9 +1,11 @@
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/domain/todo.dart';
+import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/repository/task_repository.dart';
 import 'package:imploop/repository/todo_repository.dart';
 import 'package:imploop/service/task_type_service.dart';
+import 'package:imploop/service/todo_type_service.dart';
 
 class TaskService {
   static Future<Task?> registerNewTask(String name, TaskType? taskType) async {
@@ -21,7 +23,7 @@ class TaskService {
     } else {
       registeredTaskType = taskType;
     }
-    
+
     return await TaskRepository.create(name, registeredTaskType.taskTypeId);
   }
 
@@ -33,15 +35,32 @@ class TaskService {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
 
-  static Future<Todo> registerNewTodo(
-    int taskId,
+  static Future<Todo?> registerNewTodo(
+    Task task,
     String name,
     int estimate,
+    TodoType? todoType,
   ) async {
+    if (todoType == null) {
+      return null;
+    }
+
+    late final TodoType registeredTodoType;
+    if (todoType.todoTypeId == -1) {
+      final tmp = await TodoTypeService.add(todoType.name);
+      if (tmp == null) {
+        return null;
+      }
+      registeredTodoType = tmp;
+    } else {
+      registeredTodoType = todoType;
+    }
+
     return await TodoRepository.create(
-      taskId: taskId,
+      taskId: task.taskId,
       name: name,
       estimate: estimate,
+      todoTypeId: registeredTodoType.todoTypeId,
     );
   }
 

@@ -8,8 +8,8 @@ final StateProvider<TodoType?> selectedTodoTypeProvider =
     StateProvider((_) => null);
 
 /// 既存のテーブルにある値をフォームに入力した文字列に応じて表示するフォーム
-class RecommendationInputForm extends HookConsumerWidget {
-  const RecommendationInputForm({
+class RecommendationTodoTypeInputForm extends HookConsumerWidget {
+  const RecommendationTodoTypeInputForm({
     Key? key,
   }) : super(key: key);
 

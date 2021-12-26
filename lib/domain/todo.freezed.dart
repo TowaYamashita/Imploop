@@ -22,6 +22,7 @@ class _$TodoTearOff {
       required int taskId,
       required String name,
       required int statusId,
+      required int todoTypeId,
       required int estimate,
       int? elapsed}) {
     return _Todo(
@@ -29,6 +30,7 @@ class _$TodoTearOff {
       taskId: taskId,
       name: name,
       statusId: statusId,
+      todoTypeId: todoTypeId,
       estimate: estimate,
       elapsed: elapsed,
     );
@@ -44,6 +46,7 @@ mixin _$Todo {
   int get taskId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get statusId => throw _privateConstructorUsedError;
+  int get todoTypeId => throw _privateConstructorUsedError;
   int get estimate => throw _privateConstructorUsedError;
   int? get elapsed => throw _privateConstructorUsedError;
 
@@ -60,6 +63,7 @@ abstract class $TodoCopyWith<$Res> {
       int taskId,
       String name,
       int statusId,
+      int todoTypeId,
       int estimate,
       int? elapsed});
 }
@@ -78,6 +82,7 @@ class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
     Object? taskId = freezed,
     Object? name = freezed,
     Object? statusId = freezed,
+    Object? todoTypeId = freezed,
     Object? estimate = freezed,
     Object? elapsed = freezed,
   }) {
@@ -97,6 +102,10 @@ class _$TodoCopyWithImpl<$Res> implements $TodoCopyWith<$Res> {
       statusId: statusId == freezed
           ? _value.statusId
           : statusId // ignore: cast_nullable_to_non_nullable
+              as int,
+      todoTypeId: todoTypeId == freezed
+          ? _value.todoTypeId
+          : todoTypeId // ignore: cast_nullable_to_non_nullable
               as int,
       estimate: estimate == freezed
           ? _value.estimate
@@ -120,6 +129,7 @@ abstract class _$TodoCopyWith<$Res> implements $TodoCopyWith<$Res> {
       int taskId,
       String name,
       int statusId,
+      int todoTypeId,
       int estimate,
       int? elapsed});
 }
@@ -139,6 +149,7 @@ class __$TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
     Object? taskId = freezed,
     Object? name = freezed,
     Object? statusId = freezed,
+    Object? todoTypeId = freezed,
     Object? estimate = freezed,
     Object? elapsed = freezed,
   }) {
@@ -158,6 +169,10 @@ class __$TodoCopyWithImpl<$Res> extends _$TodoCopyWithImpl<$Res>
       statusId: statusId == freezed
           ? _value.statusId
           : statusId // ignore: cast_nullable_to_non_nullable
+              as int,
+      todoTypeId: todoTypeId == freezed
+          ? _value.todoTypeId
+          : todoTypeId // ignore: cast_nullable_to_non_nullable
               as int,
       estimate: estimate == freezed
           ? _value.estimate
@@ -179,6 +194,7 @@ class _$_Todo extends _Todo {
       required this.taskId,
       required this.name,
       required this.statusId,
+      required this.todoTypeId,
       required this.estimate,
       this.elapsed})
       : super._();
@@ -192,13 +208,15 @@ class _$_Todo extends _Todo {
   @override
   final int statusId;
   @override
+  final int todoTypeId;
+  @override
   final int estimate;
   @override
   final int? elapsed;
 
   @override
   String toString() {
-    return 'Todo(todoId: $todoId, taskId: $taskId, name: $name, statusId: $statusId, estimate: $estimate, elapsed: $elapsed)';
+    return 'Todo(todoId: $todoId, taskId: $taskId, name: $name, statusId: $statusId, todoTypeId: $todoTypeId, estimate: $estimate, elapsed: $elapsed)';
   }
 
   @override
@@ -210,6 +228,8 @@ class _$_Todo extends _Todo {
             const DeepCollectionEquality().equals(other.taskId, taskId) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.statusId, statusId) &&
+            const DeepCollectionEquality()
+                .equals(other.todoTypeId, todoTypeId) &&
             const DeepCollectionEquality().equals(other.estimate, estimate) &&
             const DeepCollectionEquality().equals(other.elapsed, elapsed));
   }
@@ -221,6 +241,7 @@ class _$_Todo extends _Todo {
       const DeepCollectionEquality().hash(taskId),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(statusId),
+      const DeepCollectionEquality().hash(todoTypeId),
       const DeepCollectionEquality().hash(estimate),
       const DeepCollectionEquality().hash(elapsed));
 
@@ -236,6 +257,7 @@ abstract class _Todo extends Todo {
       required int taskId,
       required String name,
       required int statusId,
+      required int todoTypeId,
       required int estimate,
       int? elapsed}) = _$_Todo;
   const _Todo._() : super._();
@@ -248,6 +270,8 @@ abstract class _Todo extends Todo {
   String get name;
   @override
   int get statusId;
+  @override
+  int get todoTypeId;
   @override
   int get estimate;
   @override

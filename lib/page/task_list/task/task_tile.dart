@@ -45,7 +45,7 @@ class TaskTile extends HookWidget {
             ),
             trailing: IconButton(
               onPressed: () => {
-                TodoCreateModal.show(context, task.taskId),
+                TodoCreateModal.show(context, task),
               },
               icon: const Icon(Icons.add_outlined),
             ),
