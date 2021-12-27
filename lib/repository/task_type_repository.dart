@@ -34,12 +34,12 @@ class TaskTypeRepository {
   }
 
   /// Tagを取得する
-  static Future<TodoType?> get(int taskTypeId) async {
+  static Future<TaskType?> get(int taskTypeId) async {
     final db = await instance.database;
     final rows = await db
         .rawQuery('SELECT * FROM $table WHERE task_type_id = ?', [taskTypeId]);
     if (rows.isEmpty) return null;
 
-    return TodoType.fromMap(rows.first);
+    return TaskType.fromMap(rows.first);
   }
 }

@@ -51,10 +51,14 @@ class TaskRepository {
   /// Taskの名前を更新する
   ///
   /// 更新に成功したらtrue、そうでなければfalseが返ってくる
-  static Future<bool> update(int taskId, String name) async {
+  static Future<bool> update(Task updatedTask) async {
     final db = await instance.database;
-    final int affectedRowCount = await db.update(table, {"name": name},
-        where: "task_id=?", whereArgs: [taskId]);
+    final int affectedRowCount = await db.update(
+      table,
+      updatedTask.toMap(),
+      where: "task_id=?",
+      whereArgs: [updatedTask.taskId],
+    );
 
     return affectedRowCount > 0 ? true : false;
   }

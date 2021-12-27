@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/service/task_type_service.dart';
 
+/// 選択したTaskTypeを管理するProvider
 final StateProvider<TaskType?> selectedTaskTypeProvider =
     StateProvider((_) => null);
 
@@ -11,11 +13,14 @@ final StateProvider<TaskType?> selectedTaskTypeProvider =
 class RecommendationTaskTypeInputForm extends HookConsumerWidget {
   const RecommendationTaskTypeInputForm({
     Key? key,
+    this.task,
   }) : super(key: key);
+
+  final Task? task;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final input = useState<String?>(null);
+    final ValueNotifier<String?> input = useState<String?>(null);
     final showRecommedationList = useState<bool>(false);
     final selectedTaskType = ref.watch(selectedTaskTypeProvider);
     final TextEditingController controller = TextEditingController();
@@ -28,19 +33,21 @@ class RecommendationTaskTypeInputForm extends HookConsumerWidget {
       children: [
         ListTile(
           title: TextFormField(
-            decoration: const InputDecoration(hintText: '種類を選択してください'),
-            controller: controller,
-            onChanged: (value) {
-              input.value = value;
-            },
-            onTap: () =>
-                showRecommedationList.value = !showRecommedationList.value,
-          ),
+              decoration: const InputDecoration(hintText: '種類を選択してください'),
+              controller: controller,
+              onChanged: (value) {
+                input.value = value;
+              },
+              onTap: () {
+                showRecommedationList.value = !showRecommedationList.value;
+              }),
           trailing: IconButton(
             onPressed: () {
               input.value = null;
               showRecommedationList.value = false;
-              ref.read(selectedTaskTypeProvider.notifier).state = null;
+              ref
+                  .read(selectedTaskTypeProvider.notifier)
+                  .update((state) => null);
             },
             icon: const Icon(Icons.cancel_outlined),
           ),

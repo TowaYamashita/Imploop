@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/page/task_list/task/recommendation_task_type_input_form.dart';
 import 'package:imploop/service/task_service.dart';
 
-class TaskCreateModal extends ConsumerWidget {
+class TaskCreateModal extends HookConsumerWidget {
   TaskCreateModal({Key? key}) : super(key: key);
 
   static show(BuildContext context) {
@@ -24,6 +25,11 @@ class TaskCreateModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(() {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        ref.read(selectedTaskTypeProvider.notifier).update((state) => null);
+      });
+    }, const []);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Task入力'),

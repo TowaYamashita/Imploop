@@ -21,7 +21,7 @@ class TaskTypeService {
     if (await hasAlreadyRegistered(name) == false) {
       return await TaskTypeRepository.create(name);
     }
-    return null;
+    return getByTypeName(name);
   }
 
   /// 登録済みのTaskTypeのリストを取得する
@@ -31,7 +31,22 @@ class TaskTypeService {
     return await TaskTypeRepository.getAll() ?? [];
   }
 
-  static Future<bool> existsTaskType(TaskType taskType) async {
-    return await TaskTypeRepository.get(taskType.taskTypeId) != null;
+  static Future<bool> existsTaskType(int taskTypeId) async {
+    return await TaskTypeRepository.get(taskTypeId) != null;
+  }
+
+  static Future<TaskType?> get(int taskTypeId) async {
+    return await TaskTypeRepository.get(taskTypeId);
+  }
+
+  static Future<TaskType?> getByTypeName(String taskTypeName) async {
+    final List<TaskType> registeredTaskTypeList =
+        await TaskTypeRepository.getAll() ?? [];
+    try {
+      return registeredTaskTypeList.firstWhere(
+          (registeredTaskType) => registeredTaskType.name == taskTypeName);
+    } catch (e) {
+      return null;
+    }
   }
 }
