@@ -27,4 +27,8 @@ class TodoService {
   static Future<bool> existsTodo(Todo todo) async {
     return await TodoRepository.get(todo.todoId) != null;
   }
+
+  static Future<Todo?> getTodo(int todoId) async {
+    return await TodoRepository.get(todoId);
+  }
 }

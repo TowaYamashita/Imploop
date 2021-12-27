@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/page/common/slidable_tile.dart';
 import 'package:imploop/page/task_list/todo/todo_edit_modal.dart';
+import 'package:imploop/page/timer/timer_page.dart';
 import 'package:imploop/service/todo_service.dart';
 
 class TodoTile extends StatelessWidget {
@@ -21,7 +22,9 @@ class TodoTile extends StatelessWidget {
     return SlidableTile(
       tile: ListTile(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            TimerPage.show(context, selectedTodo: todo);
+          },
           icon: const Icon(Icons.local_fire_department),
         ),
         title: Text(

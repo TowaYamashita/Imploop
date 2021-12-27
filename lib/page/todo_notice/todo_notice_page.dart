@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/page/timer/timer_page.dart';
-import 'package:imploop/service/todo_type_service.dart';
 import 'package:imploop/service/todo_notice_service.dart';
 
 class TodoNoticePage extends HookWidget {
@@ -34,7 +32,6 @@ class TodoNoticePage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<TodoType?> tagProvider = useState<TodoType?>(null);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -45,11 +42,9 @@ class TodoNoticePage extends HookWidget {
               _NoticeFormArea(
                 formKey: noticeFormKey,
               ),
-              _TagArea(provider: tagProvider),
               _SubmitButton(
                 todo: todo,
                 noticeFormKey: noticeFormKey,
-                provider: tagProvider,
               ),
             ],
           ),
@@ -70,52 +65,29 @@ class _NoticeFormArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('振り返り'),
-        TextFormField(
-          key: formKey,
-          initialValue: '',
-          keyboardType: TextInputType.text,
-        ),
-      ],
-    );
-  }
-}
-
-/// 振り返りに付けるタグを入力・選択する
-class _TagArea extends StatelessWidget {
-  _TagArea({
-    Key? key,
-    required this.provider,
-  }) : super(key: key);
-
-  final tagFormKey = GlobalKey<FormFieldState<String>>();
-  final ValueNotifier<TodoType?> provider;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('タグ'),
-        TextFormField(
-          key: tagFormKey,
-          onEditingComplete: () async {
-            if (tagFormKey.currentState != null &&
-                tagFormKey.currentState!.value != null) {
-              final TodoType? newTag =
-                  await TodoTypeService.add(tagFormKey.currentState!.value!);
-              if (newTag != null) {
-                provider.value = newTag;
-              }
-            }
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('振り返り'),
+          TextFormField(
+            key: formKey,
+            initialValue: '',
+            keyboardType: TextInputType.multiline,
+            minLines: 5,
+            maxLines: 20,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -128,12 +100,10 @@ class _SubmitButton extends StatelessWidget {
     Key? key,
     required this.todo,
     required this.noticeFormKey,
-    required this.provider,
   }) : super(key: key);
 
   final Todo todo;
   final GlobalKey<FormFieldState<String>> noticeFormKey;
-  final ValueNotifier<TodoType?> provider;
 
   @override
   Widget build(BuildContext context) {
@@ -142,8 +112,7 @@ class _SubmitButton extends StatelessWidget {
         final String notice = noticeFormKey.currentState != null
             ? noticeFormKey.currentState!.value ?? ''
             : '';
-        final TodoType tag = provider.value!;
-        if (await TodoNoticeService.register(todo, tag, notice)) {
+        if (await TodoNoticeService.register(todo, notice)) {
           TimerPage.show(context);
         }
       },
