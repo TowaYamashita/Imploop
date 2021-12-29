@@ -15,9 +15,9 @@ class TodoNotice {
 
   factory TodoNotice.fromMap(Map<String, dynamic> todoNotice) {
     return TodoNotice(
-      todoNoticeId: todoNotice[TodoNoticeArgument.todo_notice_id] as int,
-      todoId: todoNotice[TodoNoticeArgument.todo_id] as int,
-      body: todoNotice[TodoNoticeArgument.body] as String,
+      todoNoticeId: todoNotice[TodoNoticeArgument.todo_notice_id.name] as int,
+      todoId: todoNotice[TodoNoticeArgument.todo_id.name] as int,
+      body: todoNotice[TodoNoticeArgument.body.name] as String,
     );
   }
 

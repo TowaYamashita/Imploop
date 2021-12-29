@@ -83,13 +83,13 @@ const List<String> _initializeQuery = [
   CREATE TABLE task_notice(
     task_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
     task_id INTEGER NOT NULL,
-    body TEXT NOT NULL,
+    body TEXT NOT NULL
   )''',
   '''
   CREATE TABLE todo_notice(
     todo_notice_id INTEGER PRIMARY KEY AUTOINCREMENT,
     todo_id INTEGER NOT NULL,
-    body TEXT NOT NULL,
+    body TEXT NOT NULL
   )''',
   '''
   CREATE TABLE task_type(
