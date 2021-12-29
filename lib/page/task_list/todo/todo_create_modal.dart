@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/page/task_list/todo/recommendation_todo_type_input_form.dart';
-import 'package:imploop/service/task_service.dart';
+import 'package:imploop/service/todo_service.dart';
 
 class TodoCreateModal extends HookConsumerWidget {
   TodoCreateModal({
@@ -91,7 +91,7 @@ class TodoCreateModal extends HookConsumerWidget {
                         : null;
                     late final Todo? addedTodo;
                     if (_name != null && _estimate != null) {
-                      addedTodo = await TaskService.registerNewTodo(
+                      addedTodo = await TodoService.registerNewTodo(
                         task,
                         _name,
                         _estimate,
