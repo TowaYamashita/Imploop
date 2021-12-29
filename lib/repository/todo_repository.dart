@@ -11,6 +11,7 @@ class TodoRepository {
     required int taskId,
     required String name,
     required int estimate,
+    required int todoTypeId,
     int? elapsed,
   }) async {
     final Map<String, dynamic> row = {
@@ -18,6 +19,7 @@ class TodoRepository {
       "name": name,
       "estimate": estimate,
       "elapsed": elapsed,
+      "todo_type_id": todoTypeId,
     };
 
     final db = await instance.database;
@@ -28,6 +30,7 @@ class TodoRepository {
       taskId: row["task_id"] as int,
       name: row["name"] as String,
       statusId: 1,
+      todoTypeId: row["todo_type_id"] as int,
       estimate: row["estimate"] as int,
       elapsed: row["elapsed"] as int?,
     );

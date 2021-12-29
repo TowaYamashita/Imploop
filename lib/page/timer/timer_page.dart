@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imploop/domain/task.dart';
-import 'package:imploop/domain/todo_timer.dart';
 import 'package:imploop/domain/todo.dart';
+import 'package:imploop/domain/todo_timer.dart';
 import 'package:imploop/page/common/count_up_timer.dart';
+import 'package:imploop/page/todo_notice/todo_notice_page.dart';
 import 'package:imploop/service/task_service.dart';
 import 'package:imploop/service/todo_service.dart';
 
@@ -65,11 +66,17 @@ class TimerPage extends StatelessWidget {
                 )
               : ElevatedButton(
                   onPressed: () async {
-                    final int elapsedMinute = TodoTimer(stopWatchTimer).elapsedMinutes();
-                    await TodoService.finishTodo(
+                    final int elapsedMinute =
+                        TodoTimer(stopWatchTimer).elapsedMinutes();
+                    if (await TodoService.finishTodo(
                       selectedTodo!,
                       elapsedMinute,
-                    );
+                    )) {
+                      TodoNoticePage.show(
+                        context,
+                        (await TodoService.getTodo(selectedTodo!.todoId))!,
+                      );
+                    }
                   },
                   child: Text(
                     "${selectedTodo!.name}を完了させる",

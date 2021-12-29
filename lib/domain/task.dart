@@ -7,6 +7,7 @@ enum TaskArgument {
   task_id,
   name,
   status_id,
+  task_type_id,
 }
 
 @freezed
@@ -16,6 +17,7 @@ abstract class Task implements _$Task {
     required int taskId,
     required String name,
     required int statusId,
+    required int taskTypeId,
   }) = _Task;
 
   factory Task.fromMap(Map<String, dynamic> task) {
@@ -23,6 +25,7 @@ abstract class Task implements _$Task {
       taskId: task[TaskArgument.task_id.name] as int,
       name: task[TaskArgument.name.name] as String,
       statusId: task[TaskArgument.status_id.name] as int,
+      taskTypeId: task[TaskArgument.task_type_id.name] as int,
     );
   }
 
@@ -31,6 +34,7 @@ abstract class Task implements _$Task {
       TaskArgument.task_id.name: taskId,
       TaskArgument.name.name: name,
       TaskArgument.status_id.name: statusId,
+      TaskArgument.task_type_id.name: taskTypeId,
     };
   }
 }

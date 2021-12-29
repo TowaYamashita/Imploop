@@ -7,9 +7,10 @@ class TaskRepository {
   static DBProvider instance = DBProvider.instance;
 
   /// Taskを新規追加する
-  static Future<Task> create(String name) async {
-    final Map<String, String> row = {
+  static Future<Task> create(String name, int taskTypeId) async {
+    final Map<String, dynamic> row = {
       "name": name,
+      "task_type_id": taskTypeId,
     };
 
     final db = await instance.database;
@@ -19,6 +20,7 @@ class TaskRepository {
       taskId: id,
       name: name,
       statusId: 1,
+      taskTypeId: taskTypeId,
     );
   }
 
@@ -49,10 +51,14 @@ class TaskRepository {
   /// Taskの名前を更新する
   ///
   /// 更新に成功したらtrue、そうでなければfalseが返ってくる
-  static Future<bool> update(int taskId, String name) async {
+  static Future<bool> update(Task updatedTask) async {
     final db = await instance.database;
-    final int affectedRowCount = await db.update(table, {"name": name},
-        where: "task_id=?", whereArgs: [taskId]);
+    final int affectedRowCount = await db.update(
+      table,
+      updatedTask.toMap(),
+      where: "task_id=?",
+      whereArgs: [updatedTask.taskId],
+    );
 
     return affectedRowCount > 0 ? true : false;
   }
