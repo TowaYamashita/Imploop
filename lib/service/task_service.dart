@@ -31,6 +31,16 @@ class TaskService {
     return await TaskRepository.getAll() ?? [];
   }
 
+  static Future<List<Task>> getAllTaskWithoutFinished() async {
+    final List<Task> result = [];
+    for (Task task in await TaskRepository.getAll() ?? []) {
+      if (task.isFinished()) {
+        result.add(task);
+      }
+    }
+    return result;
+  }
+
   static Future<List<Todo>> getAllTodoInTask(int taskId) async {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
