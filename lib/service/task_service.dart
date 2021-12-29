@@ -45,6 +45,7 @@ class TaskService {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
 
+  /// 引数のtaskIdを持つ完了状態ではないTodoの一覧を取得する
   static Future<List<Todo>> getAllTodoWithoutFinishedInTask(int taskId) async {
     final List<Todo> result = [];
     for (Todo todo in await TodoRepository.getByTaskId(taskId) ?? []) {
@@ -93,5 +94,12 @@ class TaskService {
 
   static Future<bool> deleteTask(Task deletedTask) async {
     return await TaskRepository.delete(deletedTask);
+  }
+
+  /// 引数のTaskに完了状態ではないTodoがあるかどうか判定する
+  /// 
+  /// 完了状態ではないTodoが1つでもあればtrue、そうでなければfalseを返す
+  static Future<bool> containsNonFinishedTodo(Task task) async {
+    return (await getAllTodoWithoutFinishedInTask(task.taskId)).isEmpty;
   }
 }
