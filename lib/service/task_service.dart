@@ -35,6 +35,16 @@ class TaskService {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
 
+  static Future<List<Todo>> getAllTodoWithoutFinishedInTask(int taskId) async {
+    final List<Todo> result = [];
+    for (Todo todo in await TodoRepository.getByTaskId(taskId) ?? []) {
+      if (todo.isFinished()) {
+        result.add(todo);
+      }
+    }
+    return result;
+  }
+
   static Future<Todo?> registerNewTodo(
     Task task,
     String name,
