@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:imploop/domain/status.dart';
 part 'todo.freezed.dart';
 
 enum TodoArgument {
@@ -48,5 +49,9 @@ abstract class Todo implements _$Todo {
       TodoArgument.estimate.name: estimate,
       TodoArgument.elapsed.name: elapsed,
     };
+  }
+
+  bool isFinished() {
+    return statusId == StatusProcess.done.index;
   }
 }
