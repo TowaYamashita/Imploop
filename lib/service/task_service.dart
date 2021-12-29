@@ -71,4 +71,8 @@ class TaskService {
   static Future<bool> containsNonFinishedTodo(Task task) async {
     return (await getAllTodoWithoutFinishedInTask(task.taskId)).isEmpty;
   }
+
+  static Future<bool> existsTask(Task task) async {
+    return await TaskRepository.get(task.taskId) != null;
+  }
 }
