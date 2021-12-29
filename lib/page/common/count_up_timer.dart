@@ -25,16 +25,10 @@ class CountUpTimer extends StatefulWidget {
 }
 
 class _State extends State<CountUpTimer> {
-  // final StopWatchTimer _stopWatchTimer = StopWatchTimer(
-  //   mode: StopWatchMode.countUp,
-  //   onChange: (value) {},
-  //   onChangeRawSecond: (value) {},
-  //   onChangeRawMinute: (value) {},
-  // );
-
   @override
   void initState() {
     super.initState();
+    widget.stopWatchTimer.onExecute.add(StopWatchExecute.reset);
     widget.stopWatchTimer.rawTime.listen((value) {});
     widget.stopWatchTimer.minuteTime.listen((value) {});
     widget.stopWatchTimer.secondTime.listen((value) {});
