@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:imploop/domain/status.dart';
 part 'task.freezed.dart';
 
 enum TaskArgument {
@@ -36,5 +37,9 @@ abstract class Task implements _$Task {
       TaskArgument.status_id.name: statusId,
       TaskArgument.task_type_id.name: taskTypeId,
     };
+  }
+
+  bool isNotFinished() {
+    return statusId != Status.getStatusNumber(StatusProcess.done);
   }
 }

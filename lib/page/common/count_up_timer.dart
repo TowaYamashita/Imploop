@@ -36,12 +36,6 @@ class _State extends State<CountUpTimer> {
   }
 
   @override
-  void dispose() async {
-    super.dispose();
-    await widget.stopWatchTimer.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(

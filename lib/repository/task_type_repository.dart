@@ -1,5 +1,4 @@
 import 'package:imploop/domain/task_type.dart';
-import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/repository/database_provider.dart';
 
 class TaskTypeRepository {

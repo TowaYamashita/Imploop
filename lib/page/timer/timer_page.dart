@@ -4,6 +4,7 @@ import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/todo.dart';
 import 'package:imploop/domain/todo_timer.dart';
 import 'package:imploop/page/common/count_up_timer.dart';
+import 'package:imploop/page/task_list/task/task_create_modal.dart';
 import 'package:imploop/page/todo_notice/todo_notice_page.dart';
 import 'package:imploop/service/task_service.dart';
 import 'package:imploop/service/todo_service.dart';
@@ -95,21 +96,31 @@ class TaskSelectorDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _future = useMemoized(() => TaskService.getAllTask());
-    final _snapshot = useFuture(_future);
-    if (_snapshot.connectionState != ConnectionState.done) {
+    final _snapshot = useFuture(TaskService.getAllTaskWithoutFinished());
+    if (!_snapshot.hasData) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
     final List<Task> allTaskList = _snapshot.data!;
-    return SimpleDialog(
-      title: const Text('Todoを選択'),
-      children: [
-        for (final task in allTaskList) SimpleDialogTaskListTile(task: task),
-      ],
-    );
+    return allTaskList.isEmpty
+        ? AlertDialog(
+            title: Text('選択できるTaskがありません'),
+            content: ElevatedButton(
+              onPressed: () {
+                TaskCreateModal.show(context);
+              },
+              child: Text('Taskを作成する'),
+            ),
+          )
+        : SimpleDialog(
+            title: const Text('Todoを選択'),
+            children: [
+              for (final task in allTaskList)
+                SimpleDialogTaskListTile(task: task),
+            ],
+          );
   }
 }
 
@@ -123,8 +134,8 @@ class SimpleDialogTaskListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _future =
-        useMemoized(() => TaskService.getAllTodoInTask(task.taskId));
+    final _future = useMemoized(
+        () => TaskService.getAllTodoWithoutFinishedInTask(task.taskId));
     final _snapshot = useFuture(_future);
     if (_snapshot.connectionState != ConnectionState.done) {
       return const Center(

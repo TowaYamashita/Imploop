@@ -1,11 +1,9 @@
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/domain/todo.dart';
-import 'package:imploop/domain/todo_type.dart';
 import 'package:imploop/repository/task_repository.dart';
 import 'package:imploop/repository/todo_repository.dart';
 import 'package:imploop/service/task_type_service.dart';
-import 'package:imploop/service/todo_type_service.dart';
 
 class TaskService {
   static Future<Task?> registerNewTask(String name, TaskType? taskType) async {
@@ -31,37 +29,43 @@ class TaskService {
     return await TaskRepository.getAll() ?? [];
   }
 
+  static Future<List<Task>> getAllTaskWithoutFinished() async {
+    final List<Task> result = [];
+    final List<Task>? taskList = await TaskRepository.getAll();
+    if (taskList == null) {
+      return [];
+    }
+
+    for (Task task in taskList) {
+      if (await containsNonFinishedTodo(task.taskId)) {
+        result.add(task);
+      }
+    }
+    return result;
+  }
+
+  static Future<Task?> get(int taskId) async {
+    return await TaskRepository.get(taskId);
+  }
+
   static Future<List<Todo>> getAllTodoInTask(int taskId) async {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
 
-  static Future<Todo?> registerNewTodo(
-    Task task,
-    String name,
-    int estimate,
-    TodoType? todoType,
-  ) async {
-    if (todoType == null) {
-      return null;
+  /// 引数のtaskIdを持つ完了状態ではないTodoの一覧を取得する
+  static Future<List<Todo>> getAllTodoWithoutFinishedInTask(int taskId) async {
+    final List<Todo> result = [];
+    final List<Todo>? todoList = await TodoRepository.getByTaskId(taskId);
+    if (todoList == null) {
+      return [];
     }
 
-    late final TodoType registeredTodoType;
-    if (todoType.todoTypeId == -1) {
-      final tmp = await TodoTypeService.add(todoType.name);
-      if (tmp == null) {
-        return null;
+    for (Todo todo in todoList) {
+      if (todo.isNotFinished()) {
+        result.add(todo);
       }
-      registeredTodoType = tmp;
-    } else {
-      registeredTodoType = todoType;
     }
-
-    return await TodoRepository.create(
-      taskId: task.taskId,
-      name: name,
-      estimate: estimate,
-      todoTypeId: registeredTodoType.todoTypeId,
-    );
+    return result;
   }
 
   static Future<bool> editTask(Task updatedTask) async {
@@ -73,5 +77,16 @@ class TaskService {
 
   static Future<bool> deleteTask(Task deletedTask) async {
     return await TaskRepository.delete(deletedTask);
+  }
+
+  /// 引数のTaskに完了状態ではないTodoがあるかどうか判定する
+  ///
+  /// 完了状態ではないTodoが1つでもあればtrue、そうでなければfalseを返す
+  static Future<bool> containsNonFinishedTodo(int taskId) async {
+    return (await getAllTodoWithoutFinishedInTask(taskId)).isNotEmpty;
+  }
+
+  static Future<bool> existsTask(Task task) async {
+    return await TaskRepository.get(task.taskId) != null;
   }
 }

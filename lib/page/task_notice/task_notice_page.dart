@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:imploop/domain/task.dart';
-import 'package:imploop/domain/todo.dart';
-import 'package:imploop/page/task_notice/task_notice_page.dart';
 import 'package:imploop/page/timer/timer_page.dart';
-import 'package:imploop/service/task_service.dart';
-import 'package:imploop/service/todo_notice_service.dart';
+import 'package:imploop/service/task_notice_service.dart';
 
-class TodoNoticePage extends HookWidget {
-  TodoNoticePage({
+class TaskNoticePage extends HookWidget {
+  TaskNoticePage({
     Key? key,
-    required this.todo,
+    required this.task,
   }) : super(key: key);
 
   static show(
     BuildContext context,
-    Todo todo,
+    Task task,
   ) {
     return Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return TodoNoticePage(
-            todo: todo,
+          return TaskNoticePage(
+            task: task,
           );
         },
         fullscreenDialog: true,
@@ -30,7 +27,7 @@ class TodoNoticePage extends HookWidget {
     );
   }
 
-  final Todo todo;
+  final Task task;
   final noticeFormKey = GlobalKey<FormFieldState<String>>();
 
   @override
@@ -46,7 +43,7 @@ class TodoNoticePage extends HookWidget {
                 formKey: noticeFormKey,
               ),
               _SubmitButton(
-                todo: todo,
+                task: task,
                 noticeFormKey: noticeFormKey,
               ),
             ],
@@ -74,7 +71,7 @@ class _NoticeFormArea extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('振り返り'),
+          const Text('タスクの振り返り'),
           TextFormField(
             key: formKey,
             initialValue: '',
@@ -91,7 +88,7 @@ class _NoticeFormArea extends StatelessWidget {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (value) {
               if (value == null) {
-                return 'Todoの振り返りを入力してください';
+                return 'Taskの振り返りを入力してください';
               }
               if (value.length == 0 || value.length > 400) {
                 return '振り返りは1文字以上400文字以下で入力してください';
@@ -112,11 +109,11 @@ class _NoticeFormArea extends StatelessWidget {
 class _SubmitButton extends StatelessWidget {
   const _SubmitButton({
     Key? key,
-    required this.todo,
+    required this.task,
     required this.noticeFormKey,
   }) : super(key: key);
 
-  final Todo todo;
+  final Task task;
   final GlobalKey<FormFieldState<String>> noticeFormKey;
 
   @override
@@ -127,13 +124,8 @@ class _SubmitButton extends StatelessWidget {
           final String notice = noticeFormKey.currentState != null
               ? noticeFormKey.currentState!.value ?? ''
               : '';
-          if (await TodoNoticeService.register(todo, notice)) {
-            if (await TaskService.containsNonFinishedTodo(todo.taskId)) {
-              TimerPage.show(context);
-            } else {
-              final Task? finishedTask = await TaskService.get(todo.taskId);
-              TaskNoticePage.show(context, finishedTask!);
-            }
+          if (await TaskNoticeService.register(task, notice)) {
+            TimerPage.show(context);
           }
         }
       },
