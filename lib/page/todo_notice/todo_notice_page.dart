@@ -88,6 +88,17 @@ class _NoticeFormArea extends StatelessWidget {
                 ),
               ),
             ),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (value == null) {
+                return 'Todoの振り返りを入力してください';
+              }
+              if (value.length == 0 || value.length > 400) {
+                return '振り返りは1文字以上400文字以下で入力してください';
+              }
+              return null;
+            },
+            maxLength: 400,
           ),
         ],
       ),
@@ -112,15 +123,17 @@ class _SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        final String notice = noticeFormKey.currentState != null
-            ? noticeFormKey.currentState!.value ?? ''
-            : '';
-        if (await TodoNoticeService.register(todo, notice)) {
-          if (await TaskService.containsNonFinishedTodo(todo.taskId)) {
-            TimerPage.show(context);
-          } else {
-            final Task? finishedTask = await TaskService.get(todo.taskId);
-            TaskNoticePage.show(context, finishedTask!);
+        if (noticeFormKey.currentState?.validate() ?? false) {
+          final String notice = noticeFormKey.currentState != null
+              ? noticeFormKey.currentState!.value ?? ''
+              : '';
+          if (await TodoNoticeService.register(todo, notice)) {
+            if (await TaskService.containsNonFinishedTodo(todo.taskId)) {
+              TimerPage.show(context);
+            } else {
+              final Task? finishedTask = await TaskService.get(todo.taskId);
+              TaskNoticePage.show(context, finishedTask!);
+            }
           }
         }
       },
