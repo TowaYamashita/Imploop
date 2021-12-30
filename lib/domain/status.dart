@@ -20,4 +20,15 @@ class Status {
         return 'もうやった';
     }
   }
+
+  static int getStatusNumber(StatusProcess currentProcess){
+    switch (currentProcess) {
+      case StatusProcess.todo:
+        return 1;
+      case StatusProcess.doing:
+        return 2;
+      case StatusProcess.done:
+        return 3;
+    }
+  }
 }

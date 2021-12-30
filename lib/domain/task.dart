@@ -40,6 +40,6 @@ abstract class Task implements _$Task {
   }
 
   bool isFinished() {
-    return statusId == StatusProcess.done.index;
+    return statusId == Status.getStatusNumber(StatusProcess.done);
   }
 }
