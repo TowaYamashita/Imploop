@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/todo.dart';
+import 'package:imploop/page/task_list/task_list_page.dart';
 import 'package:imploop/page/task_list/todo/recommendation_todo_type_input_form.dart';
 import 'package:imploop/service/todo_service.dart';
 
@@ -110,8 +111,8 @@ class TodoCreateModal extends HookConsumerWidget {
                           ),
                         ),
                       );
-                      // 前の画面に遷移
-                      Navigator.pop(context);
+                      //タスク一覧画面に遷移
+                      TaskListPage.show(context);
                     }
                   }
                 },
