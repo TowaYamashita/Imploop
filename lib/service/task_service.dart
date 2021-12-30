@@ -31,8 +31,13 @@ class TaskService {
 
   static Future<List<Task>> getAllTaskWithoutFinished() async {
     final List<Task> result = [];
-    for (Task task in await TaskRepository.getAll() ?? []) {
-      if (task.isFinished()) {
+    final List<Task>? taskList = await TaskRepository.getAll();
+    if (taskList == null) {
+      return [];
+    }
+
+    for (Task task in taskList) {
+      if (await containsNonFinishedTodo(task.taskId)) {
         result.add(task);
       }
     }
@@ -50,8 +55,13 @@ class TaskService {
   /// 引数のtaskIdを持つ完了状態ではないTodoの一覧を取得する
   static Future<List<Todo>> getAllTodoWithoutFinishedInTask(int taskId) async {
     final List<Todo> result = [];
-    for (Todo todo in await TodoRepository.getByTaskId(taskId) ?? []) {
-      if (todo.isFinished()) {
+    final List<Todo>? todoList = await TodoRepository.getByTaskId(taskId);
+    if (todoList == null) {
+      return [];
+    }
+
+    for (Todo todo in todoList) {
+      if (todo.isNotFinished()) {
         result.add(todo);
       }
     }
@@ -70,10 +80,10 @@ class TaskService {
   }
 
   /// 引数のTaskに完了状態ではないTodoがあるかどうか判定する
-  /// 
+  ///
   /// 完了状態ではないTodoが1つでもあればtrue、そうでなければfalseを返す
   static Future<bool> containsNonFinishedTodo(int taskId) async {
-    return (await getAllTodoWithoutFinishedInTask(taskId)).isEmpty;
+    return (await getAllTodoWithoutFinishedInTask(taskId)).isNotEmpty;
   }
 
   static Future<bool> existsTask(Task task) async {

@@ -39,7 +39,7 @@ abstract class Task implements _$Task {
     };
   }
 
-  bool isFinished() {
-    return statusId == Status.getStatusNumber(StatusProcess.done);
+  bool isNotFinished() {
+    return statusId != Status.getStatusNumber(StatusProcess.done);
   }
 }

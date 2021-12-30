@@ -51,7 +51,7 @@ abstract class Todo implements _$Todo {
     };
   }
 
-  bool isFinished() {
-    return statusId == Status.getStatusNumber(StatusProcess.done);
+  bool isNotFinished() {
+    return statusId != Status.getStatusNumber(StatusProcess.done);
   }
 }
