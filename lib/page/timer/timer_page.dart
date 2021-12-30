@@ -96,9 +96,8 @@ class TaskSelectorDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _future = useMemoized(() => TaskService.getAllTaskWithoutFinished());
-    final _snapshot = useFuture(_future);
-    if (_snapshot.connectionState != ConnectionState.done) {
+    final _snapshot = useFuture(TaskService.getAllTaskWithoutFinished());
+    if (!_snapshot.hasData) {
       return const Center(
         child: CircularProgressIndicator(),
       );
