@@ -39,6 +39,10 @@ class TaskService {
     return result;
   }
 
+  static Future<Task?> get(int taskId) async {
+    return await TaskRepository.get(taskId);
+  }
+
   static Future<List<Todo>> getAllTodoInTask(int taskId) async {
     return await TodoRepository.getByTaskId(taskId) ?? [];
   }
@@ -68,8 +72,8 @@ class TaskService {
   /// 引数のTaskに完了状態ではないTodoがあるかどうか判定する
   /// 
   /// 完了状態ではないTodoが1つでもあればtrue、そうでなければfalseを返す
-  static Future<bool> containsNonFinishedTodo(Task task) async {
-    return (await getAllTodoWithoutFinishedInTask(task.taskId)).isEmpty;
+  static Future<bool> containsNonFinishedTodo(int taskId) async {
+    return (await getAllTodoWithoutFinishedInTask(taskId)).isEmpty;
   }
 
   static Future<bool> existsTask(Task task) async {
