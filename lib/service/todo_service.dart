@@ -50,7 +50,7 @@ class TodoService {
     return await TodoRepository.update(
       finishedTodo.copyWith(
         elapsed: elapsed,
-        statusId: StatusProcess.doing.index,
+        statusId: Status.getStatusNumber(StatusProcess.done),
       ),
     );
   }
