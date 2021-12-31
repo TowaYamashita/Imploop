@@ -77,7 +77,24 @@ class TodoNoticeCarouselView extends HookWidget {
     }
     final List<TodoNotice> todoNoticeList = _snapshot.data!;
 
-    final carouselCardList = getItems(todoNoticeList);
+    final List<Widget> carouselCardList = getItems(todoNoticeList);
+    if (carouselCardList.isEmpty) {
+      return Container(
+        width: double.maxFinite,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Todoの振り返りが登録されていません。',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      );
+    }
     return CarouselSlider(
       options: CarouselOptions(),
       items: carouselCardList,
@@ -154,7 +171,25 @@ class TaskNoticeCarouselView extends HookWidget {
     }
     final List<TaskNotice> taskNoticeList = _snapshot.data!;
 
-    final carouselCardList = getItems(taskNoticeList);
+    final List<Widget> carouselCardList = getItems(taskNoticeList);
+    if (carouselCardList.isEmpty) {
+      return Container(
+        width: double.maxFinite,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Taskの振り返りが登録されていません。',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
+        ),
+      );
+    }
+
     return CarouselSlider(
       options: CarouselOptions(),
       items: carouselCardList,

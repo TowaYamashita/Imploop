@@ -23,13 +23,13 @@ class TaskListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<List<Task>?> allTaskList = useState<List<Task>?>(null);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Taskリスト'),
       ),
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           allTaskList.value = await TaskService.getAllTask();
         },
         child: const _TaskList(),
@@ -57,16 +57,25 @@ class _TaskList extends StatelessWidget {
         }
 
         final List<Task>? _taskList = snapshot.data ?? [];
+        if (_taskList == null || _taskList.isEmpty) {
+          return Center(
+            child: Text(
+              'Taskが登録されていません。\n右下のボタンを押下してTaskを追加しましょう。',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          );
+        }
         return ListView.builder(
           itemBuilder: (context, index) {
             return TaskTile(
-              title: _taskList![index].name.toString(),
+              title: _taskList[index].name.toString(),
               subtitle:
                   'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
               task: _taskList[index],
             );
           },
-          itemCount: _taskList!.length,
+          itemCount: _taskList.length,
         );
       },
     );
