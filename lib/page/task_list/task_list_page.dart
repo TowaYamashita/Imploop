@@ -26,7 +26,7 @@ class TaskListPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Taskリスト'),
+        title: const Text('Task一覧'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
