@@ -5,31 +5,29 @@ import 'package:imploop/domain/task.dart';
 import 'package:imploop/page/task_list/task/task_create_modal.dart';
 import 'package:imploop/page/task_list/task/task_tile.dart';
 import 'package:imploop/service/task_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class TaskListPage extends HookConsumerWidget {
   const TaskListPage({Key? key}) : super(key: key);
 
   static show(BuildContext context) {
-    return Navigator.push(
+    return pushNewScreen(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return const TaskListPage();
-        },
-      ),
+      screen: const TaskListPage(),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<List<Task>?> allTaskList = useState<List<Task>?>(null);
-    
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Taskリスト'),
+        title: const Text('Task一覧'),
+        automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           allTaskList.value = await TaskService.getAllTask();
         },
         child: const _TaskList(),
@@ -57,16 +55,25 @@ class _TaskList extends StatelessWidget {
         }
 
         final List<Task>? _taskList = snapshot.data ?? [];
+        if (_taskList == null || _taskList.isEmpty) {
+          return Center(
+            child: Text(
+              'Taskが登録されていません。\n右下のボタンを押下してTaskを追加しましょう。',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          );
+        }
         return ListView.builder(
           itemBuilder: (context, index) {
             return TaskTile(
-              title: _taskList![index].name.toString(),
+              title: _taskList[index].name.toString(),
               subtitle:
                   'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
               task: _taskList[index],
             );
           },
-          itemCount: _taskList!.length,
+          itemCount: _taskList.length,
         );
       },
     );

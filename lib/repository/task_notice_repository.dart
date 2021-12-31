@@ -43,4 +43,18 @@ class TaskNoticeRepository {
     }
     return taskNoticeInTodo;
   }
+
+  /// すべてのTaskNoticeを取得する
+  static Future<List<TaskNotice>?> getAll() async {
+    final db = await instance.database;
+    final rows = await db.rawQuery('SELECT * FROM $table');
+    if (rows.isEmpty) return null;
+
+    final List<TaskNotice> taskNoticeList = [];
+    for (var element in rows) {
+      final TaskNotice todoNotice = TaskNotice.fromMap(element);
+      taskNoticeList.add(todoNotice);
+    }
+    return taskNoticeList;
+  }
 }

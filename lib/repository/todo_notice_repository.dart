@@ -18,7 +18,7 @@ class TodoNoticeRepository {
     return await get(id);
   }
 
-  /// TodoNoticeを取得する   
+  /// TodoNoticeを取得する
   static Future<TodoNotice?> get(int todoNoticeId) async {
     final db = await instance.database;
     final rows = await db
@@ -28,13 +28,12 @@ class TodoNoticeRepository {
     return TodoNotice.fromMap(rows.first);
   }
 
-  // Todoに紐づくTodoNoticeを取得する   
+  /// Todoに紐づくTodoNoticeを取得する
   static Future<List<TodoNotice>?> getByTodoId(int todoId) async {
     final db = await instance.database;
-    final rows = await db
-        .rawQuery('SELECT * FROM $table WHERE todo_id', [todoId]);
+    final rows =
+        await db.rawQuery('SELECT * FROM $table WHERE todo_id', [todoId]);
     if (rows.isEmpty) return null;
-
 
     final List<TodoNotice> todoNoticeInTodo = [];
     for (var element in rows) {
@@ -42,5 +41,19 @@ class TodoNoticeRepository {
       todoNoticeInTodo.add(todoNotice);
     }
     return todoNoticeInTodo;
+  }
+
+  /// すべてのTodoNoticeを取得する
+  static Future<List<TodoNotice>?> getAll() async {
+    final db = await instance.database;
+    final rows = await db.rawQuery('SELECT * FROM $table');
+    if (rows.isEmpty) return null;
+
+    final List<TodoNotice> todoNoticeList = [];
+    for (var element in rows) {
+      final TodoNotice todoNotice = TodoNotice.fromMap(element);
+      todoNoticeList.add(todoNotice);
+    }
+    return todoNoticeList;
   }
 }

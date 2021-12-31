@@ -1,5 +1,6 @@
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_notice.dart';
+import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/repository/task_notice_repository.dart';
 import 'package:imploop/service/task_service.dart';
 import 'package:imploop/service/task_type_service.dart';
@@ -30,5 +31,19 @@ class TaskNoticeService {
   /// 1件も無ければnullを返す
   static Future<List<TaskNotice>?> getTaskNoticeList(Task task) async{
     return await TaskNoticeRepository.getByTaskId(task.taskId);
+  }
+
+  /// TaskTypeに紐づく振り返りをすべて取得する
+  static Future<List<TaskNotice>> getTaskNoticeListByTaskType(
+    TaskType? taskType,
+  ) async {
+    final int taskTypeId = taskType?.taskTypeId ?? -1;
+
+    List<TaskNotice>? result;
+    if (taskTypeId != -1) {
+      result = await TaskNoticeRepository.getByTaskId(taskType!.taskTypeId);
+    }
+
+    return result ??= (await TaskNoticeRepository.getAll() ?? []);
   }
 }

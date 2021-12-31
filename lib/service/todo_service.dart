@@ -62,4 +62,8 @@ class TodoService {
   static Future<Todo?> getTodo(int todoId) async {
     return await TodoRepository.get(todoId);
   }
+
+  static Future<List<Todo>?> getTodoByTodoType(int todoTypeId) async {
+    return await TodoRepository.getByTodoTypeId(todoTypeId);
+  }
 }
