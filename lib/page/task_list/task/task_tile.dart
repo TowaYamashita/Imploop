@@ -28,44 +28,57 @@ class TaskTile extends HookWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SlidableTile(
-          tile: ListTile(
-            leading: IconButton(
-              onPressed: () {
-                _isVisibleTodoList.value = !_isVisibleTodoList.value;
-              },
-              icon: _isVisibleTodoList.value
-                  ? const Icon(Icons.arrow_drop_up_outlined)
-                  : const Icon(Icons.arrow_drop_down_outlined),
-            ),
-            title: Text(
-              title,
-            ),
-            subtitle: Text(
-              subtitle,
-            ),
-            trailing: IconButton(
-              onPressed: () => {
-                TodoCreateModal.show(context, task),
-              },
-              icon: const Icon(Icons.add_outlined),
-            ),
-          ),
-          editAction: (context) => TaskEditModal.show(context, task),
-          deleteAction: (context) async {
-            if (await TaskService.deleteTask(task)) {
-              // Taskが追加されたことをスナックバーで通知
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Todoが削除されました。',
-                  ),
+            tile: ListTile(
+              leading: IconButton(
+                onPressed: () {
+                  _isVisibleTodoList.value = !_isVisibleTodoList.value;
+                },
+                icon: _isVisibleTodoList.value
+                    ? const Icon(Icons.arrow_drop_up_outlined)
+                    : const Icon(Icons.arrow_drop_down_outlined),
+              ),
+              title: Text(
+                title,
+                style: TextStyle(
+                  decoration: task.isNotFinished()
+                      ? TextDecoration.none
+                      : TextDecoration.lineThrough,
                 ),
-              );
-              // 前の画面に遷移
-              Navigator.pop(context);
-            }
-          },
-        ),
+              ),
+              subtitle: Text(
+                subtitle,
+              ),
+              trailing: IconButton(
+                onPressed: () => {
+                  if (task.isNotFinished())
+                    {
+                      TodoCreateModal.show(context, task),
+                    }
+                },
+                icon: const Icon(Icons.add_outlined),
+              ),
+            ),
+            editAction: (context) {
+              if (task.isNotFinished()) {
+                TaskEditModal.show(context, task);
+              }
+            },
+            deleteAction: (context) async {
+              if (task.isNotFinished()) {
+                if (await TaskService.deleteTask(task)) {
+                  // Taskが追加されたことをスナックバーで通知
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Todoが削除されました。',
+                      ),
+                    ),
+                  );
+                  // 前の画面に遷移
+                  Navigator.pop(context);
+                }
+              }
+            }),
         Visibility(
           visible: _isVisibleTodoList.value,
           child: _TodoList(taskId: task.taskId),
