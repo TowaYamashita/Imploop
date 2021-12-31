@@ -110,8 +110,7 @@ class _TodoList extends StatelessWidget {
           itemBuilder: (context, index) {
             return TodoTile(
               title: _todoList![index].name.toString(),
-              subtitle:
-                  'taskId: ${_todoList[index].taskId} statusId: ${_todoList[index].statusId} estimate: ${_todoList[index].estimate}',
+              subtitle: '見積もり時間: ${_todoList[index].estimate}分',
               todo: _todoList[index],
             );
           },
