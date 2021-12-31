@@ -61,6 +61,21 @@ class TodoRepository {
     return todosInTask;
   }
 
+  /// 引数をtodo_type_idに持つtodoを取得する
+  static Future<List<Todo>?> getByTodoTypeId(int todoTypeId) async {
+    final db = await instance.database;
+    final rows =
+        await db.rawQuery('SELECT * FROM $table WHERE todo_type_id = ?', [todoTypeId]);
+    if (rows.isEmpty) return null;
+
+    final List<Todo> todoList = [];
+    for (var element in rows) {
+      final Todo todo = Todo.fromMap(element);
+      todoList.add(todo);
+    }
+    return todoList;
+  }
+
   /// Todoを更新する
   ///
   /// 更新に成功したらtrue、そうでなければfalseが返ってくる
