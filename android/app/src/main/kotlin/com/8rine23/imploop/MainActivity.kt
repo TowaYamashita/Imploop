@@ -1,4 +1,4 @@
-package com.example.sample
+package com.8rine23.imploop
 
 import io.flutter.embedding.android.FlutterActivity
 
