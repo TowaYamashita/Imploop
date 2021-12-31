@@ -27,12 +27,22 @@ class TodoTile extends StatelessWidget {
       tile: ListTile(
         leading: IconButton(
           onPressed: () {
-            TimerPage.show(context, selectedTodo: todo);
+            if (todo.isNotFinished()) {
+              TimerPage.show(context, selectedTodo: todo);
+            }
           },
-          icon: const Icon(Icons.local_fire_department),
+          icon: Icon(
+            Icons.local_fire_department,
+            color: todo.isNotFinished() ? Colors.redAccent : Colors.grey,
+          ),
         ),
         title: Text(
           title,
+          style: TextStyle(
+            decoration: todo.isNotFinished()
+                ? TextDecoration.none
+                : TextDecoration.lineThrough,
+          ),
         ),
         subtitle: Text(
           subtitle,
@@ -42,119 +52,125 @@ class TodoTile extends StatelessWidget {
           icon: const Icon(Icons.arrow_forward_ios_rounded),
         ),
       ),
-      editAction: (context) => TodoEditModal.show(context, todo),
+      editAction: (context) {
+        if (todo.isNotFinished()) {
+          TodoEditModal.show(context, todo);
+        }
+      },
       deleteAction: (context) async {
-        if (await TodoService.deleteTodo(todo)) {
-          // Taskが追加されたことをスナックバーで通知
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '${todo.name}が削除されました。',
+        if (todo.isNotFinished()) {
+          if (await TodoService.deleteTodo(todo)) {
+            // Taskが追加されたことをスナックバーで通知
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  '${todo.name}が削除されました。',
+                ),
               ),
-            ),
-          );
-
-          final int countFinishedTodoInTask =
-              (await TaskService.getAllTodoInTask(todo.taskId)).length;
-          final bool containsNonFinishedTodo =
-              await TaskService.containsNonFinishedTodo(todo.taskId);
-
-          if (countFinishedTodoInTask != 0 && containsNonFinishedTodo) {
-            // タスク一覧画面に遷移
-            TaskListPage.show(context);
-          } else if (countFinishedTodoInTask == 0) {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return WillPopScope(
-                  /// 戻るボタンを無効にする
-                  onWillPop: () async => false,
-                  child: AlertDialog(
-                    title: const Text("補足"),
-                    content: const Text(
-                      'このTaskに含まれるTodoがすべて削除されました。\n下の選択肢のどちらかを選択してください。',
-                      textAlign: TextAlign.start,
-                    ),
-                    actions: <Widget>[
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              child: const Text("Todoを新しく追加する"),
-                              onPressed: () async {
-                                TodoCreateModal.show(
-                                  context,
-                                  (await TaskService.get(todo.taskId))!,
-                                );
-                              },
-                            ),
-                            TextButton(
-                              child: const Text("タスク一覧画面に戻る"),
-                              onPressed: () async {
-                                TaskListPage.show(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
             );
-          } else {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return WillPopScope(
-                  /// 戻るボタンを無効にする
-                  onWillPop: () async => false,
-                  child: AlertDialog(
-                    title: const Text("補足"),
-                    content: const Text(
-                      'このTaskに含まれるTodoがすべて完了状態になりました。\n下の選択肢のどちらかを選択してください。',
-                      textAlign: TextAlign.start,
-                    ),
-                    actions: <Widget>[
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              child: const Text(
-                                "Taskの振り返りを行う",
+
+            final int countFinishedTodoInTask =
+                (await TaskService.getAllTodoInTask(todo.taskId)).length;
+            final bool containsNonFinishedTodo =
+                await TaskService.containsNonFinishedTodo(todo.taskId);
+
+            if (countFinishedTodoInTask != 0 && containsNonFinishedTodo) {
+              // タスク一覧画面に遷移
+              TaskListPage.show(context);
+            } else if (countFinishedTodoInTask == 0) {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return WillPopScope(
+                    /// 戻るボタンを無効にする
+                    onWillPop: () async => false,
+                    child: AlertDialog(
+                      title: const Text("補足"),
+                      content: const Text(
+                        'このTaskに含まれるTodoがすべて削除されました。\n下の選択肢のどちらかを選択してください。',
+                        textAlign: TextAlign.start,
+                      ),
+                      actions: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                child: const Text("Todoを新しく追加する"),
+                                onPressed: () async {
+                                  TodoCreateModal.show(
+                                    context,
+                                    (await TaskService.get(todo.taskId))!,
+                                  );
+                                },
                               ),
-                              onPressed: () async {
-                                TaskNoticePage.show(
-                                  context,
-                                  (await TaskService.get(todo.taskId))!,
-                                );
-                              },
-                            ),
-                            TextButton(
-                              child: const Text("Todoを新しく追加する"),
-                              onPressed: () async {
-                                TodoCreateModal.show(
-                                  context,
-                                  (await TaskService.get(todo.taskId))!,
-                                );
-                              },
-                            ),
-                          ],
+                              TextButton(
+                                child: const Text("タスク一覧画面に戻る"),
+                                onPressed: () async {
+                                  TaskListPage.show(context);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            } else {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return WillPopScope(
+                    /// 戻るボタンを無効にする
+                    onWillPop: () async => false,
+                    child: AlertDialog(
+                      title: const Text("補足"),
+                      content: const Text(
+                        'このTaskに含まれるTodoがすべて完了状態になりました。\n下の選択肢のどちらかを選択してください。',
+                        textAlign: TextAlign.start,
                       ),
-                    ],
-                  ),
-                );
-              },
-            );
+                      actions: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                child: const Text(
+                                  "Taskの振り返りを行う",
+                                ),
+                                onPressed: () async {
+                                  TaskNoticePage.show(
+                                    context,
+                                    (await TaskService.get(todo.taskId))!,
+                                  );
+                                },
+                              ),
+                              TextButton(
+                                child: const Text("Todoを新しく追加する"),
+                                onPressed: () async {
+                                  TodoCreateModal.show(
+                                    context,
+                                    (await TaskService.get(todo.taskId))!,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
           }
         }
       },
