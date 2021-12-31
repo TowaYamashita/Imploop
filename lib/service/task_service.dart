@@ -1,3 +1,4 @@
+import 'package:imploop/domain/status.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/domain/todo.dart';
@@ -88,5 +89,13 @@ class TaskService {
 
   static Future<bool> existsTask(Task task) async {
     return await TaskRepository.get(task.taskId) != null;
+  }
+
+  static Future<bool> finishTask(Task finishedTask) async {
+    return await TaskRepository.update(
+      finishedTask.copyWith(
+        statusId: Status.getStatusNumber(StatusProcess.done),
+      ),
+    );
   }
 }
