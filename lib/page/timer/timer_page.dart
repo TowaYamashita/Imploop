@@ -8,6 +8,7 @@ import 'package:imploop/page/task_list/task/task_create_modal.dart';
 import 'package:imploop/page/todo_notice/todo_notice_page.dart';
 import 'package:imploop/service/task_service.dart';
 import 'package:imploop/service/todo_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class TimerPage extends StatelessWidget {
   const TimerPage({Key? key, this.selectedTodo}) : super(key: key);
@@ -15,14 +16,10 @@ class TimerPage extends StatelessWidget {
   final Todo? selectedTodo;
 
   static show(BuildContext context, {Todo? selectedTodo}) {
-    return Navigator.push(
+    return pushNewScreen(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return TimerPage(
-            selectedTodo: selectedTodo,
-          );
-        },
+      screen: TimerPage(
+        selectedTodo: selectedTodo,
       ),
     );
   }

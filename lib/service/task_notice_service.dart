@@ -19,6 +19,8 @@ class TaskNoticeService {
       return false;
     }
 
+    await TaskService.finishTask(task);
+    
     return await TaskNoticeRepository.create(
           task.taskId,
           body,
@@ -27,9 +29,9 @@ class TaskNoticeService {
   }
 
   /// Taskに紐づく振り返りをすべて取得する
-  /// 
+  ///
   /// 1件も無ければnullを返す
-  static Future<List<TaskNotice>?> getTaskNoticeList(Task task) async{
+  static Future<List<TaskNotice>?> getTaskNoticeList(Task task) async {
     return await TaskNoticeRepository.getByTaskId(task.taskId);
   }
 

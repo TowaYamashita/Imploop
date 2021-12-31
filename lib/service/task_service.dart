@@ -1,3 +1,4 @@
+import 'package:imploop/domain/status.dart';
 import 'package:imploop/domain/task.dart';
 import 'package:imploop/domain/task_type.dart';
 import 'package:imploop/domain/todo.dart';
@@ -88,5 +89,41 @@ class TaskService {
 
   static Future<bool> existsTask(Task task) async {
     return await TaskRepository.get(task.taskId) != null;
+  }
+
+  static Future<bool> finishTask(Task finishedTask) async {
+    return await TaskRepository.update(
+      finishedTask.copyWith(
+        statusId: Status.getStatusNumber(StatusProcess.done),
+      ),
+    );
+  }
+
+  static Future<Map<String, int>> getTodoStatusList(Task task) async {
+    final todoList = await TodoRepository.getByTaskId(task.taskId);
+    if (todoList == null) {
+      return {};
+    }
+    int countTodo = 0;
+    int countDoing = 0;
+    int countDone = 0;
+    for (var todo in todoList) {
+      switch (todo.statusId) {
+        case 1:
+          countTodo++;
+          break;
+        case 2:
+          countDoing++;
+          break;
+        case 3:
+          countDone++;
+          break;
+      }
+    }
+    return {
+      "todo": countTodo,
+      "doing": countDoing,
+      "done": countDone,
+    };
   }
 }
