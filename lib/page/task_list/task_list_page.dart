@@ -5,18 +5,15 @@ import 'package:imploop/domain/task.dart';
 import 'package:imploop/page/task_list/task/task_create_modal.dart';
 import 'package:imploop/page/task_list/task/task_tile.dart';
 import 'package:imploop/service/task_service.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class TaskListPage extends HookConsumerWidget {
   const TaskListPage({Key? key}) : super(key: key);
 
   static show(BuildContext context) {
-    return Navigator.push(
+    return pushNewScreen(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return const TaskListPage();
-        },
-      ),
+      screen: const TaskListPage(),
     );
   }
 
@@ -27,6 +24,7 @@ class TaskListPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Task一覧'),
+        automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
         onRefresh: () async {
