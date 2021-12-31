@@ -98,4 +98,32 @@ class TaskService {
       ),
     );
   }
+
+  static Future<Map<String, int>> getTodoStatusList(Task task) async {
+    final todoList = await TodoRepository.getByTaskId(task.taskId);
+    if (todoList == null) {
+      return {};
+    }
+    int countTodo = 0;
+    int countDoing = 0;
+    int countDone = 0;
+    for (var todo in todoList) {
+      switch (todo.statusId) {
+        case 1:
+          countTodo++;
+          break;
+        case 2:
+          countDoing++;
+          break;
+        case 3:
+          countDone++;
+          break;
+      }
+    }
+    return {
+      "todo": countTodo,
+      "doing": countDoing,
+      "done": countDone,
+    };
+  }
 }

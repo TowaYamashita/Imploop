@@ -98,7 +98,7 @@ class _TodoList extends StatelessWidget {
     return FutureBuilder<List<Todo>>(
       future: TaskService.getAllTodoInTask(taskId),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
           );

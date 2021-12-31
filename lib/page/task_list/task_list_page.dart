@@ -66,16 +66,41 @@ class _TaskList extends StatelessWidget {
         }
         return ListView.builder(
           itemBuilder: (context, index) {
-            return TaskTile(
-              title: _taskList[index].name.toString(),
-              subtitle:
-                  'taskId: ${_taskList[index].taskId} statusId: ${_taskList[index].statusId}',
-              task: _taskList[index],
+            return TaskTileCreator(
+              taskList: _taskList,
+              index: index,
             );
           },
           itemCount: _taskList.length,
         );
       },
+    );
+  }
+}
+
+class TaskTileCreator extends HookWidget {
+  const TaskTileCreator({
+    Key? key,
+    required this.taskList,
+    required this.index,
+  }) : super(key: key);
+
+  final List<Task> taskList;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final _snapshot = useFuture(TaskService.getTodoStatusList(taskList[index]));
+    if (!_snapshot.hasData) {
+      return const Center(child: CircularProgressIndicator.adaptive());
+    }
+    final todoStatusList = _snapshot.data!;
+    return TaskTile(
+      title: taskList[index].name.toString(),
+      subtitle: todoStatusList.isEmpty
+          ? 'まだTodoが登録されていません'
+          : '実行前: ${todoStatusList["todo"]}/実行中:${todoStatusList["doing"]}/実行済:${todoStatusList["done"]}',
+      task: taskList[index],
     );
   }
 }
